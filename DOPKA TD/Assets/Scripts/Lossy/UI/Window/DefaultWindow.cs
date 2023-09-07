@@ -116,6 +116,8 @@ namespace Lossy.UI.Window
 
             Hided?.Invoke(this);
             Hided = null;
+            
+            Destroy(gameObject);
         }
 
         protected virtual void OnClickCloseButton()
@@ -126,8 +128,6 @@ namespace Lossy.UI.Window
                 _actionOnClose.Invoke();
                 _actionOnClose = null;
             }
-
-            Destroy(gameObject);
         }
 
         public void SetActionOnClose(Action action)
