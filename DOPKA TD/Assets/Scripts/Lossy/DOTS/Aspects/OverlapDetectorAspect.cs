@@ -38,5 +38,6 @@ namespace Lossy.DOTS.Aspects
         public float3 RayDirection => _localTransform.ValueRO.Forward();
         public uint CastLayerMask => (uint) _raycastOverlapDetectorComponent.ValueRO.LayerMask;
         public Color32 GizmoColor => _raycastOverlapDetectorComponent.ValueRO.GizmoColor;
+        public float Distance => _raycastOverlapDetectorComponent.ValueRO.Distance;
     }
 }

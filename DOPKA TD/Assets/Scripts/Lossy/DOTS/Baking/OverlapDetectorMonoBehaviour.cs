@@ -1,6 +1,7 @@
 using System;
 using Lossy.DOTS.Components;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Lossy.DOTS.Baking
@@ -10,6 +11,7 @@ namespace Lossy.DOTS.Baking
         public OverlapDetectorType OverlapDetectorType;
         public LayerMask LayerMask;
         public int ResultCount;
+        public float Scale;
         public Color32 GizmoColor;
     }
     
@@ -25,7 +27,8 @@ namespace Lossy.DOTS.Baking
                     {
                         LayerMask =  authoring.LayerMask,
                         ResultCount = authoring.ResultCount,
-                        GizmoColor = authoring.GizmoColor
+                        GizmoColor = authoring.GizmoColor,
+                        Radius = authoring.Scale
                     } );
                     break;
                 case OverlapDetectorType.Box:
@@ -33,7 +36,8 @@ namespace Lossy.DOTS.Baking
                     {
                         LayerMask = authoring.LayerMask,
                         ResultCount = authoring.ResultCount,
-                        GizmoColor = authoring.GizmoColor
+                        GizmoColor = authoring.GizmoColor,
+                        Scale = authoring.Scale
                     } );
                     break;
                 case OverlapDetectorType.RayCast:
@@ -41,7 +45,8 @@ namespace Lossy.DOTS.Baking
                     {
                         LayerMask = authoring.LayerMask,
                         ResultCount = authoring.ResultCount,
-                        GizmoColor = authoring.GizmoColor
+                        GizmoColor = authoring.GizmoColor,
+                        Distance = authoring.Scale
                     } );
                     break;
                 default:

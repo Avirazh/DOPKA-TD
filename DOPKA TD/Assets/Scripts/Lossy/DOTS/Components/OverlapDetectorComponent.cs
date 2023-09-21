@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Lossy.DOTS.Components
@@ -7,6 +8,7 @@ namespace Lossy.DOTS.Components
     {
         public int LayerMask;
         public int ResultCount;
+        public float3 Radius;
         public Color32 GizmoColor;
     }
     
@@ -14,6 +16,7 @@ namespace Lossy.DOTS.Components
     {
         public int LayerMask;
         public int ResultCount;
+        public float Scale;
         public Color32 GizmoColor;
     }
     
@@ -21,6 +24,7 @@ namespace Lossy.DOTS.Components
     {
         public int LayerMask;
         public int ResultCount;
+        public float Distance;
         public Color32 GizmoColor;
     }
 }

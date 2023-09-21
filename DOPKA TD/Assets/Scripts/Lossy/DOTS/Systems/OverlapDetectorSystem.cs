@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Lossy.DOTS.Aspects;
 using Lossy.DOTS.Components;
 using Unity.Burst;
@@ -27,75 +26,44 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            new RaycastOverlapDetectJob{CollisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld.CollisionWorld}.ScheduleParallel();
-             
+            RaycastOverlap(state);
         }
 
-        private void RaycastOverlap()
+        [BurstCompile]
+        private void RaycastOverlap(SystemState state)
         {
             
-        }
-    }
-
-    [BurstCompile]
-    public partial struct RaycastOverlapDetectJob : IJobEntity
-    {
-        public CollisionWorld CollisionWorld;
-        
-        [BurstCompile]
-        private void Execute(RaycastOverlapDetectorAspect raycastOverlapDetectorAspect)
-        {
-            var collisionWorld = CollisionWorld;//.CollisionWorld;
-            RaycastInput input = new RaycastInput()
+            foreach (var raycastOverlapDetectorAspect in SystemAPI.Query<RaycastOverlapDetectorAspect>())
             {
-                Start = raycastOverlapDetectorAspect.RayStartPosition,
-                End = raycastOverlapDetectorAspect.RayDirection,
-                Filter = new CollisionFilter()
+                var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld.CollisionWorld;
+                RaycastInput input = new RaycastInput()
                 {
-                    BelongsTo = raycastOverlapDetectorAspect.CastLayerMask,
-                    CollidesWith = 1u, // all 1s, so all layers, collide with everything
-                    GroupIndex = 0
+                    Start = raycastOverlapDetectorAspect.RayStartPosition,
+                    End = (raycastOverlapDetectorAspect.RayStartPosition + (raycastOverlapDetectorAspect.RayDirection * raycastOverlapDetectorAspect.Distance)),
+                    Filter = new CollisionFilter()
+                    {
+                        BelongsTo = raycastOverlapDetectorAspect.CastLayerMask,
+                        CollidesWith = raycastOverlapDetectorAspect.CastLayerMask, // all 1s, so all layers, collide with everything
+                        GroupIndex = 0
+                    }
+                };
+            
+                Debug.DrawRay(
+                    raycastOverlapDetectorAspect.RayStartPosition,
+                    raycastOverlapDetectorAspect.RayDirection * raycastOverlapDetectorAspect.Distance,
+                    raycastOverlapDetectorAspect.GizmoColor);
+            
+                RaycastHit hit = new RaycastHit();
+                bool haveHit = collisionWorld.CastRay(input, out hit);
+                if (haveHit)
+                {
+                    // see hit.Position
+                    // // see hit.SurfaceNormal
+                    Entity entity = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
+                    Debug.Log($"{raycastOverlapDetectorAspect.Entity.Index} RaycastHit {entity.Index} in {hit.Position} \n" +
+                              $"Ray start at {raycastOverlapDetectorAspect.RayStartPosition} to {raycastOverlapDetectorAspect.RayDirection} with scale {raycastOverlapDetectorAspect.Distance} = {input.End}");
                 }
-            };
-            
-            Debug.DrawRay(
-                raycastOverlapDetectorAspect.RayStartPosition,
-                raycastOverlapDetectorAspect.RayDirection,
-                raycastOverlapDetectorAspect.GizmoColor);
-            
-            RaycastHit hit = new RaycastHit();
-            bool haveHit = collisionWorld.CastRay(input, out hit);
-            if (haveHit)
-            {
-                // see hit.Position
-                // // see hit.SurfaceNormal
-                Entity entity = CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
-                Debug.Log($"RaycastHit {hit.Position}");
             }
-            //return Entity.Null;
-        }
-    }
-    
-    [BurstCompile]
-    public partial struct SphereOverlapDetectJob : IJobEntity
-    {
-        public PhysicsWorldSingleton PhysicsWorldSingleton;
-        
-        [BurstCompile]
-        private void Execute(SphereOverlapDetectorComponent sphereOverlapDetectorComponent)
-        {
-        }
-    }
-    
-    [BurstCompile]
-    public partial struct BoxOverlapDetectJob : IJobEntity
-    {
-        public PhysicsWorldSingleton PhysicsWorldSingleton;
-        
-        [BurstCompile]
-        private void Execute(BoxOverlapDetectorComponent boxOverlapDetectorComponent)
-        {
-            
         }
     }
 }
