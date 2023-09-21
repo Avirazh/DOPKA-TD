@@ -1,5 +1,4 @@
 using Lossy.DOTS.Aspects;
-using Lossy.DOTS.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Physics;
