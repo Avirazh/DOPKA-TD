@@ -23,7 +23,7 @@ namespace Lossy.DOTS.Baking
                 case OverlapDetectorType.Sphere:
                     AddComponent(entity, new SphereOverlapDetectorComponent() 
                     {
-                        LayerMask = authoring.LayerMask,
+                        LayerMask =  authoring.LayerMask,
                         ResultCount = authoring.ResultCount,
                         GizmoColor = authoring.GizmoColor
                     } );
