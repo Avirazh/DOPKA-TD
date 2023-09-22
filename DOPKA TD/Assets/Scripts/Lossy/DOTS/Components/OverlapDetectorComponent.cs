@@ -23,7 +23,6 @@ namespace Lossy.DOTS.Components
     public struct RaycastOverlapDetectorComponent : IComponentData
     {
         public int LayerMask;
-        public int ResultCount;
         public float Distance;
         public Color32 GizmoColor;
     }

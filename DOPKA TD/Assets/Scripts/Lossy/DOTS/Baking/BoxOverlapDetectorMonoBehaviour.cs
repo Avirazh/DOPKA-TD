@@ -25,6 +25,8 @@ namespace Lossy.DOTS.Baking
                 GizmoColor = authoring.GizmoColor,
                 Scale = authoring.Scale
             });
+            
+            AddBuffer<OverlapResultBufferElement>(entity);
         }
     }
 }

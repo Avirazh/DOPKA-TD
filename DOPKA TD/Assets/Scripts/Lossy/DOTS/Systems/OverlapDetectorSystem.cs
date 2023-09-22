@@ -33,6 +33,11 @@ namespace Lossy.DOTS.Systems
             PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
             var entityCommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
 
+            state.Dependency = new RemoveOverlapResultComponentJob()
+            {
+                EntityCommandBuffer = entityCommandBuffer
+            }.Schedule(state.Dependency);
+            
             state.Dependency = new SphereOverlapJob()
             {
                 PhysicsWorldSingleton = physicsWorldSingleton,
@@ -62,8 +67,10 @@ namespace Lossy.DOTS.Systems
             public PhysicsWorldSingleton PhysicsWorldSingleton;
             public EntityCommandBuffer EntityCommandBuffer;
 
-            private void Execute(SphereOverlapDetectorAspect sphereOverlapDetectorAspect)
+            private void Execute(SphereOverlapDetectorAspect sphereOverlapDetectorAspect, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements)
             {
+                overlapResultBufferElements.Clear();
+
                 var collisionWorld = PhysicsWorldSingleton.PhysicsWorld.CollisionWorld;
                 var collisionFilter = new CollisionFilter()
                 {
@@ -79,20 +86,18 @@ namespace Lossy.DOTS.Systems
                 
                 if (haveHit)
                 {
-                    NativeArray<Entity> nativeEntities = new NativeArray<Entity>(hits.Length, Allocator.Temp);
-
                     for (var index = 0; index < hits.Length; index++)
                     {
+                        if (index >= sphereOverlapDetectorAspect.ResultCount)
+                            break;
+                        
                         var hit = hits[index];
                         Entity entity = PhysicsWorldSingleton.CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
-                        Debug.Log(
-                            $"{sphereOverlapDetectorAspect.Entity.Index} SphereOverlap {entity.Index} in {hit.Position} \n" +
-                            $"SphereOverlap start at {sphereOverlapDetectorAspect.StartPosition} with radius {sphereOverlapDetectorAspect.Radius}");
-                        
-                        nativeEntities[index] = entity;
+                       
+                        overlapResultBufferElements.Add(new OverlapResultBufferElement(){Entity = entity});
                     }
-                    
-                    EntityCommandBuffer.AddComponent(sphereOverlapDetectorAspect.Entity, new OverlapResultComponent { Value = nativeEntities });
+
+                    EntityCommandBuffer.AddComponent(sphereOverlapDetectorAspect.Entity, new OverlapResultTag());
                 }
             }
         }
@@ -103,8 +108,10 @@ namespace Lossy.DOTS.Systems
             public PhysicsWorldSingleton PhysicsWorldSingleton;
             public EntityCommandBuffer EntityCommandBuffer;
 
-            private void Execute(BoxOverlapDetectorAspect boxOverlapDetectorAspect)
+            private void Execute(BoxOverlapDetectorAspect boxOverlapDetectorAspect, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements)
             {
+                overlapResultBufferElements.Clear();
+
                 var collisionWorld = PhysicsWorldSingleton.PhysicsWorld.CollisionWorld;
                 var collisionFilter = new CollisionFilter()
                 {
@@ -120,19 +127,18 @@ namespace Lossy.DOTS.Systems
                 
                 if (haveHit)
                 {
-                    NativeArray<Entity> nativeEntities = new NativeArray<Entity>(hits.Length, Allocator.Temp);
-
                     for (var index = 0; index < hits.Length; index++)
                     {
+                        if (index >= boxOverlapDetectorAspect.ResultCount)
+                            break;
+                        
                         var hit = hits[index];
                         Entity entity = PhysicsWorldSingleton.CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
-                        Debug.Log(
-                            $"{boxOverlapDetectorAspect.Entity.Index} BoxOverlap {entity.Index} in {hit.Position} \n" +
-                            $"BoxOverlap start at {boxOverlapDetectorAspect.StartPosition} with radius {boxOverlapDetectorAspect.Scale}");
-                        nativeEntities[index] = entity;
+                       
+                        overlapResultBufferElements.Add(new OverlapResultBufferElement(){Entity = entity});
                     }
 
-                    EntityCommandBuffer.AddComponent(boxOverlapDetectorAspect.Entity, new OverlapResultComponent { Value = nativeEntities });
+                    EntityCommandBuffer.AddComponent(boxOverlapDetectorAspect.Entity, new OverlapResultTag());
                 }
             }
         }
@@ -143,8 +149,10 @@ namespace Lossy.DOTS.Systems
             public PhysicsWorldSingleton PhysicsWorldSingleton;
             public EntityCommandBuffer EntityCommandBuffer;
 
-            private void Execute(RaycastOverlapDetectorAspect raycastOverlapDetectorAspect)
+            private void Execute(RaycastOverlapDetectorAspect raycastOverlapDetectorAspect, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements)
             {
+                overlapResultBufferElements.Clear();
+
                 var collisionWorld = PhysicsWorldSingleton.PhysicsWorld.CollisionWorld;
                 RaycastInput input = new RaycastInput()
                 {
@@ -168,14 +176,24 @@ namespace Lossy.DOTS.Systems
                 if (haveHit)
                 {
                     Entity entity = PhysicsWorldSingleton.CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
-                    Debug.Log($"{raycastOverlapDetectorAspect.Entity.Index} RaycastHit {entity.Index} in {hit.Position} \n" +
-                              $"Ray start at {raycastOverlapDetectorAspect.RayStartPosition} to {raycastOverlapDetectorAspect.RayDirection} with scale {raycastOverlapDetectorAspect.Distance} = {input.End}");
-                    
+                 
                     NativeArray<Entity> nativeEntities = new NativeArray<Entity>(1, Allocator.Temp);
                     nativeEntities[0] = entity;
 
-                    EntityCommandBuffer.AddComponent(raycastOverlapDetectorAspect.Entity, new OverlapResultComponent { Value = nativeEntities });
+                    EntityCommandBuffer.AddComponent(raycastOverlapDetectorAspect.Entity, new OverlapResultTag());
+                    
+                    overlapResultBufferElements.Add(new OverlapResultBufferElement() { Entity = entity });
                 }
+            }
+        }
+
+        private partial struct RemoveOverlapResultComponentJob : IJobEntity
+        {
+            public EntityCommandBuffer EntityCommandBuffer;
+
+            private void Execute(OverlapResultTag overlapResultTag, Entity entity)
+            {
+                EntityCommandBuffer.RemoveComponent(entity, typeof(OverlapResultTag));
             }
         }
     }

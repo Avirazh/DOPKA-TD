@@ -17,8 +17,7 @@ namespace Lossy.DOTS.Baking
         public override void Bake(SphereOverlapDetectorMonoBehaviour authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-
-
+            
             AddComponent(entity, new SphereOverlapDetectorComponent()
             {
                 LayerMask = authoring.LayerMask,
@@ -26,6 +25,8 @@ namespace Lossy.DOTS.Baking
                 GizmoColor = authoring.GizmoColor,
                 Radius = authoring.Radius
             });
+            
+            AddBuffer<OverlapResultBufferElement>(entity);
         }
     }
 }

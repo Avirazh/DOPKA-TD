@@ -7,7 +7,6 @@ namespace Lossy.DOTS.Baking
     public class RayCastOverlapDetectorMonoBehaviour : MonoBehaviour
     {
         public LayerMask LayerMask;
-        public int ResultCount;
         public float Distance;
         public Color32 GizmoColor;
     }
@@ -21,10 +20,11 @@ namespace Lossy.DOTS.Baking
             AddComponent(entity, new RaycastOverlapDetectorComponent
             {
                 LayerMask = authoring.LayerMask,
-                ResultCount = authoring.ResultCount,
                 GizmoColor = authoring.GizmoColor,
                 Distance = authoring.Distance
             });
+
+            AddBuffer<OverlapResultBufferElement>(entity);
         }
     }
 }

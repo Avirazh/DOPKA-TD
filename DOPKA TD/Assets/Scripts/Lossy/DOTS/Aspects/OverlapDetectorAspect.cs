@@ -16,6 +16,7 @@ namespace Lossy.DOTS.Aspects
         public float3 StartPosition => _localTransform.ValueRO.Position;
         public float Radius => _sphereOverlapDetectorComponent.ValueRO.Radius;
         public uint CastLayerMask => (uint) _sphereOverlapDetectorComponent.ValueRO.LayerMask;
+        public int ResultCount => _sphereOverlapDetectorComponent.ValueRO.ResultCount;
         public Color32 GizmoColor => _sphereOverlapDetectorComponent.ValueRO.GizmoColor;
     }
     
@@ -30,6 +31,7 @@ namespace Lossy.DOTS.Aspects
         public quaternion Rotation => _localTransform.ValueRO.Rotation;
         public uint CastLayerMask => (uint) _boxOverlapDetectorComponent.ValueRO.LayerMask;
         public Color32 GizmoColor => _boxOverlapDetectorComponent.ValueRO.GizmoColor;
+        public int ResultCount => _boxOverlapDetectorComponent.ValueRO.ResultCount;
         public float3 Scale => _localTransform.ValueRO.Scale;
     }
     
