@@ -8,7 +8,7 @@ namespace Lossy.DOTS.Components
     {
         public int LayerMask;
         public int ResultCount;
-        public float3 Radius;
+        public float Radius;
         public Color32 GizmoColor;
     }
     
@@ -16,7 +16,7 @@ namespace Lossy.DOTS.Components
     {
         public int LayerMask;
         public int ResultCount;
-        public float Scale;
+        public float3 Scale;
         public Color32 GizmoColor;
     }
     

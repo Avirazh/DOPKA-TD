@@ -1,5 +1,6 @@
 using Lossy.DOTS.Aspects;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using UnityEngine;
@@ -25,7 +26,69 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            SphereOverlap(state);
             RaycastOverlap(state);
+            BoxOverlap(state);
+        }
+        
+        [BurstCompile]
+        private void SphereOverlap(SystemState state)
+        {
+            foreach (var sphereOverlapDetectorAspect in SystemAPI.Query<SphereOverlapDetectorAspect>())
+            { 
+                var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld.CollisionWorld;
+                var collisionFilter = new CollisionFilter()
+                {
+                    BelongsTo = sphereOverlapDetectorAspect.CastLayerMask,
+                    CollidesWith =
+                        sphereOverlapDetectorAspect.CastLayerMask, // all 1s, so all layers, collide with everything
+                    GroupIndex = 0
+                };
+                
+                NativeList<DistanceHit> hits = new NativeList<DistanceHit>(Allocator.Temp);
+
+                bool haveHit = collisionWorld.OverlapSphere(sphereOverlapDetectorAspect.StartPosition, sphereOverlapDetectorAspect.Radius, ref hits, collisionFilter);
+                
+                if (haveHit)
+                {
+                    foreach (var hit in hits)
+                    {
+                        Entity entity = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
+                        Debug.Log($"{sphereOverlapDetectorAspect.Entity.Index} SphereOverlap {entity.Index} in {hit.Position} \n" +
+                                  $"SphereOverlap start at {sphereOverlapDetectorAspect.StartPosition} with radius {sphereOverlapDetectorAspect.Radius}");
+                    }
+                }
+            }
+        }
+        
+        [BurstCompile]
+        private void BoxOverlap(SystemState state)
+        {
+            foreach (var boxOverlapDetectorAspect in SystemAPI.Query<BoxOverlapDetectorAspect>())
+            { 
+                var collisionWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>().PhysicsWorld.CollisionWorld;
+                var collisionFilter = new CollisionFilter()
+                {
+                    BelongsTo = boxOverlapDetectorAspect.CastLayerMask,
+                    CollidesWith =
+                        boxOverlapDetectorAspect.CastLayerMask, // all 1s, so all layers, collide with everything
+                    GroupIndex = 0
+                };
+                
+                NativeList<DistanceHit> hits = new NativeList<DistanceHit>(Allocator.Temp);
+
+                bool haveHit = collisionWorld.OverlapBox(boxOverlapDetectorAspect.StartPosition, boxOverlapDetectorAspect.Rotation, boxOverlapDetectorAspect.Scale / 2, ref hits, collisionFilter);
+                
+                if (haveHit)
+                {
+                    foreach (var hit in hits)
+                    {
+                        Entity entity = SystemAPI.GetSingleton<PhysicsWorldSingleton>().CollisionWorld.Bodies[hit.RigidBodyIndex].Entity;
+                        Debug.Log($"{boxOverlapDetectorAspect.Entity.Index} BoxOverlap {entity.Index} in {hit.Position} \n" +
+                                  $"BoxOverlap start at {boxOverlapDetectorAspect.StartPosition} with radius {boxOverlapDetectorAspect.Scale}");
+                    }
+                }
+            }
         }
 
         [BurstCompile]

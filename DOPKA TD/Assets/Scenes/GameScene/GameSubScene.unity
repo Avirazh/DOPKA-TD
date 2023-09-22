@@ -284,18 +284,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 819532692}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cced227784f041b3a3e10459549cab63, type: 3}
+  m_Script: {fileID: 11500000, guid: 17e5e1c20c9f44e4903708af7e40cf24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OverlapDetectorType: 2
   LayerMask:
     serializedVersion: 2
     m_Bits: 128
   ResultCount: 1
-  Scale: 3
+  Distance: 4
   GizmoColor:
     serializedVersion: 2
-    rgba: 4278255360
+    rgba: 4278190335
 --- !u!1 &1489600597
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +307,7 @@ GameObject:
   - component: {fileID: 1489600601}
   - component: {fileID: 1489600600}
   - component: {fileID: 1489600599}
+  - component: {fileID: 1489600603}
   m_Layer: 7
   m_Name: TestCastableCube
   m_TagString: Untagged
@@ -394,13 +394,33 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489600597}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: -3}
+  m_LocalPosition: {x: 0, y: 0.5, z: -3.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1489600603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489600597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2642c06907541daa3b1fa6e15d8f344, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  ResultCount: 1
+  Scale: {x: 1, y: 1, z: 1}
+  GizmoColor:
+    serializedVersion: 2
+    rgba: 4294901760
 --- !u!1 &1855528315
 GameObject:
   m_ObjectHideFlags: 0
