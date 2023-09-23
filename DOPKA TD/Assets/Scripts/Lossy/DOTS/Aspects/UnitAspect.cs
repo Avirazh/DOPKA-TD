@@ -9,11 +9,11 @@ namespace Assets.Scripts.Lossy.DOTS.Aspects
         public readonly Entity Entity;
 
         private readonly RefRO<MovableTag> _movableTag;
-        private readonly RefRO<AgentBody> _agentBody;
+        private readonly RefRW<AgentBody> _agentBody;
 
         public void SetDestination(float3 destination)
         {
-            _agentBody.ValueRO.SetDestination(destination);
+            _agentBody.ValueRW.SetDestination(destination);
         }
     }
 }

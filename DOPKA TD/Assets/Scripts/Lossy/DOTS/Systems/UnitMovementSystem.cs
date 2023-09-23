@@ -1,50 +1,49 @@
 using Assets.Scripts.Lossy.DOTS.Aspects;
-using Lossy.DOTS.Aspects;
-using Lossy.DOTS.Components;
 using ProjectDawn.Navigation;
-using System.Diagnostics;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
+using UnityEngine;
 
-[BurstCompile]
-[UpdateBefore(typeof(AgentSteeringSystemGroup))]
-[UpdateInGroup(typeof(SimulationSystemGroup))]
-public partial struct UnitMovementSystem : ISystem
+namespace Lossy.DOTS.Systems
 {
-    private PortalAspect _portalAspect;
-
     [BurstCompile]
-    public void OnCreate(ref SystemState state)
+    [UpdateBefore(typeof(NavMeshSteeringSystem))]
+    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    public partial struct UnitMovementSystem : ISystem
     {
-        state.RequireForUpdate<PortalTag>();
-        state.RequireForUpdate<MovableTag>();
+        private PortalAspect _portalAspect;
 
-
-        var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
-        _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
-    }
-
-    [BurstCompile]
-    public void OnDestroy(ref SystemState state)
-    {
-
-    }
-
-    [BurstCompile]
-    public void OnUpdate(ref SystemState state)
-    {
-        state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.Schedule(state.Dependency);
-    }
-    public partial struct UnitMovementJob : IJobEntity
-    {
-        public float3 PortalPosition;
-        void Execute(UnitAspect unitAspect)
+        public void OnCreate(ref SystemState state)
         {
-            unitAspect.SetDestination(PortalPosition);
+            state.RequireForUpdate<PortalTag>();
+            state.RequireForUpdate<MovableTag>();
         }
-    }
+
+        [BurstCompile]
+        public void OnDestroy(ref SystemState state)
+        {
+
+        }
+
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
+        {
+            var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
+            _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
+            
+            state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.Schedule(state.Dependency);
+        }
+        public partial struct UnitMovementJob : IJobEntity
+        {
+            public float3 PortalPosition;
+            void Execute(UnitAspect unitAspect)
+            {
+                Debug.Log("Unit with movementComponent is " + unitAspect.Entity.Index);
+                Debug.Log("Target position " + PortalPosition);
+                unitAspect.SetDestination(PortalPosition);
+            }
+        }
    
+    }
 }
