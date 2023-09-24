@@ -10,10 +10,9 @@ namespace Lossy.DOTS.Aspects
     {
         public readonly Entity Entity;
 
-        private readonly RefRO<LocalTransform> _localTransform;
+        private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<SphereOverlapDetectorComponent> _sphereOverlapDetectorComponent;
-        
-        public float3 StartPosition => _localTransform.ValueRO.Position;
+        public float3 StartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
         public float Radius => _sphereOverlapDetectorComponent.ValueRO.Radius;
         public uint CastLayerMask => (uint) _sphereOverlapDetectorComponent.ValueRO.LayerMask;
         public int ResultCount => _sphereOverlapDetectorComponent.ValueRO.ResultCount;
@@ -24,26 +23,26 @@ namespace Lossy.DOTS.Aspects
     {
         public readonly Entity Entity;
         
-        private readonly RefRO<LocalTransform> _localTransform;
+        private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<BoxOverlapDetectorComponent> _boxOverlapDetectorComponent;
         
-        public float3 StartPosition => _localTransform.ValueRO.Position;
-        public quaternion Rotation => _localTransform.ValueRO.Rotation;
+        public float3 StartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
+        public quaternion Rotation => quaternion.LookRotationSafe(_localToWorld.ValueRO.Forward, _localToWorld.ValueRO.Up);
         public uint CastLayerMask => (uint) _boxOverlapDetectorComponent.ValueRO.LayerMask;
         public Color32 GizmoColor => _boxOverlapDetectorComponent.ValueRO.GizmoColor;
         public int ResultCount => _boxOverlapDetectorComponent.ValueRO.ResultCount;
-        public float3 Scale => _localTransform.ValueRO.Scale;
+        public float3 Scale => _boxOverlapDetectorComponent.ValueRO.Scale;
     }
     
     public readonly partial struct RaycastOverlapDetectorAspect : IAspect
     {
         public readonly Entity Entity;
         
-        private readonly RefRO<LocalTransform> _localTransform;
+        private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<RaycastOverlapDetectorComponent> _raycastOverlapDetectorComponent;
 
-        public float3 RayStartPosition => _localTransform.ValueRO.Position;
-        public float3 RayDirection => _localTransform.ValueRO.Forward();
+        public float3 RayStartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
+        public float3 RayDirection => _localToWorld.ValueRO.Value.Forward();
         public uint CastLayerMask => (uint) _raycastOverlapDetectorComponent.ValueRO.LayerMask;
         public Color32 GizmoColor => _raycastOverlapDetectorComponent.ValueRO.GizmoColor;
         public float Distance => _raycastOverlapDetectorComponent.ValueRO.Distance;
