@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace Assets.Scripts.Lossy.DOTS.Aspects
+namespace Lossy.DOTS.Aspects
 {
     public readonly partial struct PortalAspect : IAspect
     {
@@ -11,6 +11,12 @@ namespace Assets.Scripts.Lossy.DOTS.Aspects
 
         private readonly RefRO<PortalComponent> _portalComponent;
         private readonly RefRO<LocalTransform> _localTransform;
+        private readonly RefRW<HealthComponent> _healthComponent;
         public float3 PortalPosition => _localTransform.ValueRO.Position;
+        public float Health
+        {
+            get => _healthComponent.ValueRO.Value;
+            set => _healthComponent.ValueRW.Value = value;
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿using ProjectDawn.Navigation;
+﻿using Lossy.DOTS.Components;
+using ProjectDawn.Navigation;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Assets.Scripts.Lossy.DOTS.Aspects
+namespace Lossy.DOTS.Aspects
 {
     public readonly partial struct UnitAspect : IAspect
     {
@@ -11,6 +12,9 @@ namespace Assets.Scripts.Lossy.DOTS.Aspects
         private readonly RefRO<MovableTag> _movableTag;
         private readonly RefRW<AgentBody> _agentBody;
 
+        private readonly RefRO<DamageComponent> _damage;
+
+        public int DamageValue => _damage.ValueRO.Value;
         public void SetDestination(float3 destination)
         {
             _agentBody.ValueRW.SetDestination(destination);

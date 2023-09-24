@@ -1,4 +1,4 @@
-using Assets.Scripts.Lossy.DOTS.Aspects;
+using Lossy.DOTS.Aspects;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
