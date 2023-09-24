@@ -9,7 +9,7 @@ namespace Assets.Scripts.Lossy.DOTS.Aspects
     {
         public readonly Entity Entity;
 
-        private readonly RefRO<PortalTag> _portalTag;
+        private readonly RefRO<PortalComponent> _portalComponent;
         private readonly RefRO<LocalTransform> _localTransform;
         public float3 PortalPosition => _localTransform.ValueRO.Position;
     }

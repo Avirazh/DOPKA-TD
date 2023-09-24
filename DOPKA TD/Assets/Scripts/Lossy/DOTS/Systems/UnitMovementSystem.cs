@@ -15,7 +15,7 @@ namespace Lossy.DOTS.Systems
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PortalTag>();
+            state.RequireForUpdate<PortalComponent>();
             state.RequireForUpdate<MovableTag>();
         }
 
@@ -29,11 +29,12 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
+            var portalEntity = SystemAPI.GetSingletonEntity<PortalComponent>();
             _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
-            state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.Schedule(state.Dependency);
+            state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.ScheduleParallel(state.Dependency);
         }
 
+        [BurstCompile]
         public partial struct UnitMovementJob : IJobEntity
         {
             public float3 PortalPosition;
