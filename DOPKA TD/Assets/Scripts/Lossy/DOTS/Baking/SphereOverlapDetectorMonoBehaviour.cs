@@ -10,6 +10,14 @@ namespace Lossy.DOTS.Baking
         public int ResultCount;
         public float Radius;
         public Color32 GizmoColor;
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = GizmoColor;
+            Gizmos.DrawWireSphere(transform.position, Radius);
+        }
+#endif
     }
     
     public class SphereOverlapDetectorBaker : Baker<SphereOverlapDetectorMonoBehaviour>
