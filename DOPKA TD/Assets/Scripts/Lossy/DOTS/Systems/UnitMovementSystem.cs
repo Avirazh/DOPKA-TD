@@ -1,5 +1,4 @@
 using Assets.Scripts.Lossy.DOTS.Aspects;
-using ProjectDawn.Navigation;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -8,8 +7,8 @@ using UnityEngine;
 namespace Lossy.DOTS.Systems
 {
     [BurstCompile]
-    [UpdateBefore(typeof(NavMeshSteeringSystem))]
-    [UpdateInGroup(typeof(SimulationSystemGroup))]
+    [UpdateBefore(typeof(UnitAnimateSystem))]
+    [UpdateInGroup(typeof(PresentationSystemGroup))]
     public partial struct UnitMovementSystem : ISystem
     {
         private PortalAspect _portalAspect;
@@ -19,6 +18,7 @@ namespace Lossy.DOTS.Systems
             state.RequireForUpdate<PortalTag>();
             state.RequireForUpdate<MovableTag>();
         }
+
 
         [BurstCompile]
         public void OnDestroy(ref SystemState state)
@@ -31,9 +31,9 @@ namespace Lossy.DOTS.Systems
         {
             var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
             _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
-            
             state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.Schedule(state.Dependency);
         }
+
         public partial struct UnitMovementJob : IJobEntity
         {
             public float3 PortalPosition;
