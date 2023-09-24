@@ -165,11 +165,6 @@ namespace Lossy.DOTS.Systems
                     }
                 };
             
-                Debug.DrawRay(
-                    raycastOverlapDetectorAspect.RayStartPosition,
-                    raycastOverlapDetectorAspect.RayDirection * raycastOverlapDetectorAspect.Distance,
-                    raycastOverlapDetectorAspect.GizmoColor);
-            
                 RaycastHit hit = new RaycastHit();
                 bool haveHit = collisionWorld.CastRay(input, out hit);
                 if (haveHit)
