@@ -15,7 +15,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
-            
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
@@ -26,8 +26,8 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
-
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            
             state.Dependency = new MoveAttackProjectilesJob
             {
                 EntityCommandBuffer = entityCommandBuffer,
@@ -42,10 +42,6 @@ namespace Lossy.DOTS.Systems
                 OverlapResultTagLookup = SystemAPI.GetComponentLookup<OverlapResultTag>(true),
                 OverlapResultBufferLookup = SystemAPI.GetBufferLookup<OverlapResultBufferElement>(true),
             }.Schedule(state.Dependency);
-            
-            state.Dependency.Complete();
-            
-            entityCommandBuffer.Playback(state.EntityManager);
         }
         
         [BurstCompile]
