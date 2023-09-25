@@ -14,10 +14,6 @@ public class PortalAuthoring : MonoBehaviour
             AddComponent(entity, new PortalComponent 
             {
             });
-            AddComponent(entity, new HealthComponent
-            {
-                Value = authoring.Health
-            });
         }
     }
 }
