@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 5
-  Speed: 5
+  Speed: 500
   Tolerance: 1
   HitPrefab: {fileID: 0}
   HitZone: {fileID: 3884126730451255837}

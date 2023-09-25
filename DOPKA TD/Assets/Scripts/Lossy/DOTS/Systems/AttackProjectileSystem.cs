@@ -9,6 +9,7 @@ namespace Lossy.DOTS.Systems
 {
     [BurstCompile]
     [UpdateAfter(typeof(TowerSystem))]
+    [UpdateAfter(typeof(DestructionSystem))]
     public partial struct AttackProjectileSystem : ISystem
     {
         [BurstCompile]
@@ -81,10 +82,10 @@ namespace Lossy.DOTS.Systems
                     OverlapResultBufferLookup.TryGetBuffer(attackProjectileAspect.ExplodeZone, out var bufferData);
                     foreach (var overlapResultBufferElement in bufferData)
                     {
-                        //add component damage
-                        //add component destroy
+                        //add component damage                        
                     }
                 }
+                EntityCommandBuffer.AddComponent<DestroyTag>(attackProjectileAspect.Entity);
             }
         }
     }

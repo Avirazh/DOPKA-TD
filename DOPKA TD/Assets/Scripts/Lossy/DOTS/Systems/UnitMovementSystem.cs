@@ -9,6 +9,7 @@ namespace Lossy.DOTS.Systems
     [BurstCompile]
     [UpdateBefore(typeof(UnitAnimateSystem))]
     [UpdateInGroup(typeof(PresentationSystemGroup))]
+    [UpdateAfter(typeof(DestructionSystem))]
     public partial struct UnitMovementSystem : ISystem
     {
         private PortalAspect _portalAspect;

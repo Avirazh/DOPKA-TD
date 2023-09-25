@@ -8,19 +8,25 @@ namespace Lossy.DOTS.Systems
     public partial struct DestructionSystem : ISystem
     {
         [BurstCompile]
-        public void OnCreate(ref SystemState state) { }
+        public void OnCreate(ref SystemState state) 
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
         [BurstCompile]
         public void OnDestroy(ref SystemState state) { }
         [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
-            var entityCommandBuffer = new EntityCommandBuffer();
+            var entityCommandBuffer = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
 
             new DestructionJob
             {
                 EntityCommandBuffer = entityCommandBuffer
 
-            }.Schedule(); 
+            }.Schedule();
+
+            //state.Dependency.Complete();
+            //entityCommandBuffer.Playback(state.EntityManager);
         }
         [BurstCompile]
         public partial struct DestructionJob : IJobEntity
@@ -28,8 +34,9 @@ namespace Lossy.DOTS.Systems
             public EntityCommandBuffer EntityCommandBuffer;
 
             [BurstCompile]
-            public void Execute(DestroyTag destroyTag, Entity entity)
+            public void Execute(in DestroyTag destroyTag, Entity entity)
             {
+                //EntityCommandBuffer.RemoveComponent<UnitMovementSystem>(entity);
                 EntityCommandBuffer.DestroyEntity(entity);
             }
         }

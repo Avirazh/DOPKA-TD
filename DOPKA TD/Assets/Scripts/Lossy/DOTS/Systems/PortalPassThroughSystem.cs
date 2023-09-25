@@ -8,6 +8,7 @@ namespace Lossy.DOTS.Systems
 {
 
     [BurstCompile]
+    [UpdateAfter(typeof(DestructionSystem))]
     public partial struct PortalPassThroughSystem : ISystem
     {
         [BurstCompile]
@@ -23,7 +24,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
-            var ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             new PassThroughJob
             {
                 DamageLookup = SystemAPI.GetComponentLookup<DamageComponent>(true),
