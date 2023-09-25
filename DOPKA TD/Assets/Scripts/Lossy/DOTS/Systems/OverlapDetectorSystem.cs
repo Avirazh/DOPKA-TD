@@ -5,7 +5,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
-using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Lossy.DOTS.Systems
@@ -136,7 +135,7 @@ namespace Lossy.DOTS.Systems
                        
                         overlapResultBufferElements.Add(new OverlapResultBufferElement(){Entity = entity});
                     }
-
+                    
                     EntityCommandBuffer.AddComponent(boxOverlapDetectorAspect.Entity, new OverlapResultTag());
                 }
             }

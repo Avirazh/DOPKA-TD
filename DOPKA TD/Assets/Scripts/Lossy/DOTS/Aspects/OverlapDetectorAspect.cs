@@ -27,7 +27,7 @@ namespace Lossy.DOTS.Aspects
         private readonly RefRO<BoxOverlapDetectorComponent> _boxOverlapDetectorComponent;
         
         public float3 StartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
-        public quaternion Rotation => quaternion.LookRotationSafe(_localToWorld.ValueRO.Forward, _localToWorld.ValueRO.Up);
+        public quaternion Rotation => _localToWorld.ValueRO.Rotation;
         public uint CastLayerMask => (uint) _boxOverlapDetectorComponent.ValueRO.LayerMask;
         public Color32 GizmoColor => _boxOverlapDetectorComponent.ValueRO.GizmoColor;
         public int ResultCount => _boxOverlapDetectorComponent.ValueRO.ResultCount;

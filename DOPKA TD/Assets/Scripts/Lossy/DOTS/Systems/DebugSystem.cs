@@ -6,18 +6,22 @@ using UnityEngine;
 
 namespace Lossy.DOTS.Systems
 {
+    [BurstCompile]
     [UpdateAfter(typeof(OverlapDetectorSystem))]
     [UpdateInGroup(typeof(PhysicsSimulationGroup))]
     public partial struct DebugSystem : ISystem
     {
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
         }
 
+        [BurstCompile]
         public void OnDestroy(ref SystemState state)
         {
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             state.Dependency = new DebugJob().Schedule(state.Dependency);

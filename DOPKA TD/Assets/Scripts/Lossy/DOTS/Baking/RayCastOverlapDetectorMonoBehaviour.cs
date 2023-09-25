@@ -14,7 +14,7 @@ namespace Lossy.DOTS.Baking
         private void OnDrawGizmos()
         {
             Gizmos.color = GizmoColor;
-            Gizmos.DrawLine(transform.position, transform.position + transform.InverseTransformDirection(Vector3.forward) * Distance);
+            Debug.DrawRay(transform.position, transform.forward * Distance, GizmoColor);
         }
 #endif
     }
