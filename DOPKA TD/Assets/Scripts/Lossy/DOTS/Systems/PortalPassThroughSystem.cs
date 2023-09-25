@@ -2,20 +2,25 @@
 using Lossy.DOTS.Components;
 using Unity.Entities;
 using Unity.Collections;
+using Unity.Burst;
 
 namespace Lossy.DOTS.Systems
 {
+
+    [BurstCompile]
     public partial struct PortalPassThroughSystem : ISystem
     {
+        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<DamageComponent>();
         }
+        [BurstCompile]
         public void OnDestroy(ref SystemState state) 
         {
 
         }
-
+        [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
             var ecb = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
@@ -26,11 +31,13 @@ namespace Lossy.DOTS.Systems
             }.Schedule();
 
         }
-
+        [BurstCompile]
         public partial struct PassThroughJob : IJobEntity
         {
             public EntityCommandBuffer Ecb;
             [ReadOnly] public ComponentLookup<DamageComponent> DamageLookup;
+
+            [BurstCompile]
             public void Execute(PortalAspect portal, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements)
             {
                 if(overlapResultBufferElements.IsEmpty) return;

@@ -40,8 +40,8 @@ namespace Lossy.DOTS.Systems
             public float3 PortalPosition;
             void Execute(UnitAspect unitAspect)
             {
-                Debug.Log("Unit with movementComponent is " + unitAspect.Entity.Index);
-                Debug.Log("Target position " + PortalPosition);
+                //Debug.Log("Unit with movementComponent is " + unitAspect.Entity.Index);
+                //Debug.Log("Target position " + PortalPosition);
                 unitAspect.SetDestination(PortalPosition);
             }
         }
