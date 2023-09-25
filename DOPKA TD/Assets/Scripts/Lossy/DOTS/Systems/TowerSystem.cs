@@ -17,6 +17,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
         }
 
         [BurstCompile]
@@ -27,7 +28,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
             
             state.Dependency = new FindTargetJob
             {
@@ -41,10 +42,6 @@ namespace Lossy.DOTS.Systems
                 DeltaTime = SystemAPI.Time.DeltaTime,
                 LocalToWorldComponentLookup = SystemAPI.GetComponentLookup<LocalToWorld>(true)
             }.Schedule(state.Dependency);
-            
-            state.Dependency.Complete();
-            
-            entityCommandBuffer.Playback(state.EntityManager);
         }
         
         [BurstCompile]
@@ -60,7 +57,8 @@ namespace Lossy.DOTS.Systems
                 if (OverlapResultTagLookup.HasComponent(towerAspect.AttackZoneEntity))
                 {
                     OverlapResultBufferLookup.TryGetBuffer(towerAspect.AttackZoneEntity, out var bufferData);
-                    towerAspect.SetTarget(bufferData[0].Entity);
+                    if (bufferData.Length > 0)
+                        towerAspect.SetTarget(bufferData[0].Entity);
                 }
             }
         }
