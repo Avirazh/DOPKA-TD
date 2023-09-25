@@ -35,13 +35,14 @@ namespace Lossy.DOTS.Systems
                 OverlapResultBufferLookup = SystemAPI.GetBufferLookup<OverlapResultBufferElement>(true),
                 DeltaTime = SystemAPI.Time.DeltaTime
             }.Schedule(state.Dependency);
-            
-            state.Dependency = new ExplodeProjectilesJob()
+
+            new ExplodeProjectilesJob()
             {
                 EntityCommandBuffer = entityCommandBuffer,
                 OverlapResultTagLookup = SystemAPI.GetComponentLookup<OverlapResultTag>(true),
                 OverlapResultBufferLookup = SystemAPI.GetBufferLookup<OverlapResultBufferElement>(true),
-            }.Schedule(state.Dependency);
+                DamageBufferLookup = SystemAPI.GetBufferLookup<DamageBufferElement>(false)
+            }.Schedule();
         }
         
         [BurstCompile]
@@ -51,7 +52,7 @@ namespace Lossy.DOTS.Systems
             public float DeltaTime;
             [ReadOnly] public ComponentLookup<OverlapResultTag> OverlapResultTagLookup;
             [ReadOnly] public BufferLookup<OverlapResultBufferElement> OverlapResultBufferLookup;
-            
+
             private void Execute(AttackProjectileAspect attackProjectileAspect)
             {
                 attackProjectileAspect.Move(DeltaTime);
@@ -70,15 +71,24 @@ namespace Lossy.DOTS.Systems
             public EntityCommandBuffer EntityCommandBuffer;
             [ReadOnly] public ComponentLookup<OverlapResultTag> OverlapResultTagLookup;
             [ReadOnly] public BufferLookup<OverlapResultBufferElement> OverlapResultBufferLookup;
+            public BufferLookup<DamageBufferElement> DamageBufferLookup;
             
             private void Execute(ExplodeTag explodeTag, AttackProjectileAspect attackProjectileAspect)
             {
+                UnityEngine.Debug.Log("ExplodeProjectilesJob executed");
                 if (OverlapResultTagLookup.HasComponent(attackProjectileAspect.ExplodeZone))
                 {
                     OverlapResultBufferLookup.TryGetBuffer(attackProjectileAspect.ExplodeZone, out var bufferData);
                     foreach (var overlapResultBufferElement in bufferData)
                     {
-                        //add component damage                        
+                        UnityEngine.Debug.Log("Attackprojectile overlapResult element" + overlapResultBufferElement.Entity.Index + ", " + overlapResultBufferElement.Entity.Version);
+
+                        if (!DamageBufferLookup.HasBuffer(overlapResultBufferElement.Entity)) return;
+
+                        DamageBufferLookup.TryGetBuffer(overlapResultBufferElement.Entity, out var damageBuffer);
+                        damageBuffer.Add(new DamageBufferElement() { Value = attackProjectileAspect.DamageValue });
+
+                        EntityCommandBuffer.AddComponent<HaveHitTag>(overlapResultBufferElement.Entity);
                     }
                 }
                 EntityCommandBuffer.AddComponent<DestroyTag>(attackProjectileAspect.Entity);

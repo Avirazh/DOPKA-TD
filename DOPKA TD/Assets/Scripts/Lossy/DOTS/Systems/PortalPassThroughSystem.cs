@@ -39,25 +39,21 @@ namespace Lossy.DOTS.Systems
             [ReadOnly] public ComponentLookup<DamageComponent> DamageLookup;
 
             [BurstCompile]
-            public void Execute(PortalAspect portal, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements)
+            public void Execute(PortalAspect portal, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements, HealthAspect portalHealth)
             {
                 if(overlapResultBufferElements.IsEmpty) return;
 
                 foreach(var element in overlapResultBufferElements) 
                 {
+                    if (DamageLookup.HasComponent(element.Entity))
+                    {
+                        DamageLookup.TryGetComponent(element.Entity, out var damageComponent);
+
+                        portalHealth.DamageBuffer.Add(new DamageBufferElement { Value = damageComponent.Value});
+
+                        Ecb.AddComponent(portal.Entity, new HaveHitTag { });
+                    }
                     Ecb.AddComponent(element.Entity, new DestroyTag { });
-
-                    int damageValue;
-
-                    if (DamageLookup.TryGetComponent(element.Entity, out var damageComponent))
-                        damageValue = damageComponent.Value;
-                    else
-                        damageValue = 0;
-
-                    UnityEngine.Debug.Log(element.Entity.Index + ", " + element.Entity.Version);
-  
-                    portal.Health -= damageValue;
-
                 }
             }
         }

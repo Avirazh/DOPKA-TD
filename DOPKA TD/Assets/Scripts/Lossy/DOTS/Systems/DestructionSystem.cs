@@ -25,8 +25,6 @@ namespace Lossy.DOTS.Systems
 
             }.Schedule();
 
-            //state.Dependency.Complete();
-            //entityCommandBuffer.Playback(state.EntityManager);
         }
         [BurstCompile]
         public partial struct DestructionJob : IJobEntity
@@ -36,7 +34,7 @@ namespace Lossy.DOTS.Systems
             [BurstCompile]
             public void Execute(in DestroyTag destroyTag, Entity entity)
             {
-                //EntityCommandBuffer.RemoveComponent<UnitMovementSystem>(entity);
+                
                 EntityCommandBuffer.DestroyEntity(entity);
             }
         }

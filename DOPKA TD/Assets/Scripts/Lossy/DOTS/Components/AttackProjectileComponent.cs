@@ -5,7 +5,6 @@ namespace Lossy.DOTS.Components
 {
     public struct AttackProjectileComponent : IComponentData
     {
-        public int Damage;
         public float Speed;
         public float Tolerance;
         public Entity HitPrefab;

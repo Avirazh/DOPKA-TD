@@ -18,6 +18,7 @@ namespace Lossy.DOTS.Systems
         {
             state.RequireForUpdate<PortalComponent>();
             state.RequireForUpdate<MovableTag>();
+            state.RequireForUpdate<ProjectDawn.Navigation.AgentBody>();
         }
 
 

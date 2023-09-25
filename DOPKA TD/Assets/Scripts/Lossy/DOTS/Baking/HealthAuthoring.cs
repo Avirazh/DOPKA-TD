@@ -15,10 +15,8 @@ namespace Lossy.DOTS.Baking
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-            AddComponent(entity, new HealthComponent
-            {
-                Value = authoring.Health
-            });
+            AddComponent(entity, new MaxHealthComponent { Value = authoring.Health });
+            AddComponent(entity, new CurrentHealthComponent { Value = authoring.Health });
             AddBuffer<DamageBufferElement>(entity);
         }
     }

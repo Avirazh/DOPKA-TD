@@ -10,15 +10,8 @@ namespace Lossy.DOTS.Aspects
         public readonly Entity Entity;
 
         private readonly RefRO<PortalComponent> _portalComponent;
-        private readonly RefRO<LocalTransform> _localTransform;
-        private readonly RefRW<HealthComponent> _healthComponent;
-        private readonly DynamicBuffer<DamageBufferElement> _damageBuffer;
+        private readonly RefRO<LocalTransform> _localTransform;     
         public float3 PortalPosition => _localTransform.ValueRO.Position;
-        public float Health
-        {
-            get => _healthComponent.ValueRO.Value;
-            set => _healthComponent.ValueRW.Value = value;
-        }       
-        public DynamicBuffer<DamageBufferElement> DamageBuffer => _damageBuffer;
+
     }
 }

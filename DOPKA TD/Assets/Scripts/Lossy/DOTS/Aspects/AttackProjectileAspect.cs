@@ -13,14 +13,14 @@ namespace Lossy.DOTS.Aspects
         private readonly RefRO<AttackProjectileComponent> _attackProjectileComponent;
         private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRW<LocalTransform> _localTransform;
-
+        private readonly RefRW<DamageComponent> _damageComponent;
         public Entity HitZone => _attackProjectileComponent.ValueRO.HitZone;
         public Entity ExplodeZone => _attackProjectileComponent.ValueRO.ExplodeZone;
 
         public float3 TargetPosition => _attackProjectileTargetPositionComponent.ValueRO.TargetPosition;
         public float3 Position => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
         public float Tolerance => _attackProjectileComponent.ValueRO.Tolerance;
-
+        public int DamageValue => _damageComponent.ValueRW.Value;
         public void Move(float deltaTime)
         {
             _localTransform.ValueRW.Position += math.normalize(TargetPosition - _localTransform.ValueRO.Position) * deltaTime *

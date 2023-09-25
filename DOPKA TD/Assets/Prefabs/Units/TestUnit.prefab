@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2147380125988479964}
   - component: {fileID: 1387644871321755450}
   - component: {fileID: -996030802995520586}
+  - component: {fileID: 1232044247937618853}
   - component: {fileID: 2102290398893179052}
   m_Layer: 7
   m_Name: TestUnit
@@ -146,6 +147,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DamageToPortalValue: 10
+--- !u!114 &1232044247937618853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5878140319270767245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07b1af5b76fcbe94eb7cbffbe063c2f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Health: 50
 --- !u!65 &2102290398893179052
 BoxCollider:
   m_ObjectHideFlags: 0

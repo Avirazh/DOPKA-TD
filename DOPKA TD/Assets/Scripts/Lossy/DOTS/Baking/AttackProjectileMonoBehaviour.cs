@@ -22,12 +22,15 @@ namespace Lossy.DOTS.Baking
 
             AddComponent(entity, new AttackProjectileComponent()
             {
-                Damage = authoring.Damage,
                 Speed = authoring.Speed,
                 HitPrefab = GetEntity(authoring.HitPrefab, TransformUsageFlags.Dynamic),
-                HitZone= GetEntity(authoring.HitZone, TransformUsageFlags.Dynamic),
+                HitZone = GetEntity(authoring.HitZone, TransformUsageFlags.Dynamic),
                 ExplodeZone = GetEntity(authoring.ExplodeZone, TransformUsageFlags.Dynamic),
                 Tolerance = authoring.Tolerance
+            });
+            AddComponent(entity, new DamageComponent()
+            {
+                Value = authoring.Damage,
             });
         }
     }
