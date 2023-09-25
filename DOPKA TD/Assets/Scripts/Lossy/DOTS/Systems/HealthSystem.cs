@@ -5,15 +5,15 @@ using Unity.Entities;
 
 namespace Lossy.DOTS.Systems
 {
-    //[BurstCompile]
+    [BurstCompile]
     [UpdateAfter(typeof(DestructionSystem))]
     public partial struct HealthSystem : ISystem
     {
-        //[BurstCompile]
+        [BurstCompile]
         public void OnCreate(ref SystemState state) { }
-        //[BurstCompile]
+        [BurstCompile]
         public void OnDestroy(ref SystemState state) { }
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
             var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
@@ -23,7 +23,7 @@ namespace Lossy.DOTS.Systems
             }.Schedule();
         }
     }
-    //[BurstCompile]
+    [BurstCompile]
     public partial struct ApplyDamageJob : IJobEntity
     {
         public EntityCommandBuffer EntityCommandBuffer;
