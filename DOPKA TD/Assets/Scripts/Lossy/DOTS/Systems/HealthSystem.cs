@@ -16,18 +16,18 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
-            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
             new ApplyDamageJob
             {
                 EntityCommandBuffer = entityCommandBuffer,
-            }.Schedule();
+            }.ScheduleParallel();
         }
     }
     [BurstCompile]
     public partial struct ApplyDamageJob : IJobEntity
     {
-        public EntityCommandBuffer EntityCommandBuffer;
-        public void Execute(HealthAspect health, HaveHitTag hitTag)
+        public EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
+        public void Execute([ChunkIndexInQuery] int indexInQuery, HealthAspect health, HaveHitTag hitTag)
         {
             int damageToApply = 0;
 
@@ -44,14 +44,14 @@ namespace Lossy.DOTS.Systems
                 health.CurrentHealth -= damageToApply;
 
                 health.DamageBuffer.Clear();
-                EntityCommandBuffer.RemoveComponent<HaveHitTag>(health.Entity);
+                EntityCommandBuffer.RemoveComponent<HaveHitTag>(indexInQuery, health.Entity);
             }
 
             if(health.CurrentHealth >= health.MaxHealth)
                 health.CurrentHealth = health.MaxHealth;
 
             if (health.CurrentHealth <= 0)
-                EntityCommandBuffer.AddComponent<DestroyTag>(health.Entity);
+                EntityCommandBuffer.AddComponent<DestroyTag>(indexInQuery, health.Entity);
         }
     }
 }
