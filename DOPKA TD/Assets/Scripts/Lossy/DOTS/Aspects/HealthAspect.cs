@@ -11,6 +11,7 @@ namespace Lossy.DOTS.Aspects
         private readonly RefRW<CurrentHealthComponent> _currentHealthComponent;
         private readonly DynamicBuffer<DamageBufferElement> _damageBuffer;
 
+        public float MaxHealth => _maxHealthComponent.ValueRO.Value;
         public float CurrentHealth
         {
             get => _currentHealthComponent.ValueRO.Value;

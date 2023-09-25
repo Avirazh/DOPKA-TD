@@ -47,6 +47,9 @@ namespace Lossy.DOTS.Systems
                 EntityCommandBuffer.RemoveComponent<HaveHitTag>(health.Entity);
             }
 
+            if(health.CurrentHealth >= health.MaxHealth)
+                health.CurrentHealth = health.MaxHealth;
+
             if (health.CurrentHealth <= 0)
                 EntityCommandBuffer.AddComponent<DestroyTag>(health.Entity);
         }
