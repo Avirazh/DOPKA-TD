@@ -1,6 +1,9 @@
 using Unity.Entities;
 
-public struct PortalTag : IComponentData
+namespace Lossy.DOTS.Components
 {
+    public struct PortalTag : IComponentData
+    {
 
+    }
 }

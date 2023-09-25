@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lossy.DOTS.Baking
 {
-    public class TowerMonoBehaviour : MonoBehaviour
+    public class TowerAuthoring : MonoBehaviour
     {
         public GameObject AttackZoneGameObject;
         public float AttackCooldown;
@@ -12,9 +12,9 @@ namespace Lossy.DOTS.Baking
         public Transform AttackSpawnPoint;
     }
     
-    public class TowerBaker : Baker<TowerMonoBehaviour>
+    public class TowerBaker : Baker<TowerAuthoring>
     {
-        public override void Bake(TowerMonoBehaviour authoring)
+        public override void Bake(TowerAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 

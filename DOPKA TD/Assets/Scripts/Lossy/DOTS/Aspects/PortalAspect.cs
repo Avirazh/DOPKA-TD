@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 
-namespace Assets.Scripts.Lossy.DOTS.Aspects
+namespace Lossy.DOTS.Aspects
 {
     public readonly partial struct PortalAspect : IAspect
     {

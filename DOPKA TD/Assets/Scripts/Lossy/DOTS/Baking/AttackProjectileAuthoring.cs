@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Lossy.DOTS.Baking
 {
-    public class AttackProjectileMonoBehaviour : MonoBehaviour
+    public class AttackProjectileAuthoring : MonoBehaviour
     {
         public int Damage;
         public float Speed;
@@ -14,9 +14,9 @@ namespace Lossy.DOTS.Baking
         public GameObject ExplodeZone;
     }
 
-    public class AttackProjectileBaker : Baker<AttackProjectileMonoBehaviour>
+    public class AttackProjectileBaker : Baker<AttackProjectileAuthoring>
     {
-        public override void Bake(AttackProjectileMonoBehaviour authoring)
+        public override void Bake(AttackProjectileAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
 

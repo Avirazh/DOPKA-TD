@@ -4,36 +4,34 @@ using UnityEngine;
 
 namespace Lossy.DOTS.Baking
 {
-    public class SphereOverlapDetectorMonoBehaviour : MonoBehaviour
+    public class RayCastOverlapDetectorAuthoring : MonoBehaviour
     {
         public LayerMask LayerMask;
-        public int ResultCount;
-        public float Radius;
+        public float Distance;
         public Color32 GizmoColor;
         
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Gizmos.color = GizmoColor;
-            Gizmos.DrawWireSphere(transform.position, Radius);
+            Debug.DrawRay(transform.position, transform.forward * Distance, GizmoColor);
         }
 #endif
     }
     
-    public class SphereOverlapDetectorBaker : Baker<SphereOverlapDetectorMonoBehaviour>
+    public class RayCastOverlapDetectorBaker : Baker<RayCastOverlapDetectorAuthoring>
     {
-        public override void Bake(SphereOverlapDetectorMonoBehaviour authoring)
+        public override void Bake(RayCastOverlapDetectorAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-            
-            AddComponent(entity, new SphereOverlapDetectorComponent()
+
+            AddComponent(entity, new RaycastOverlapDetectorComponent
             {
                 LayerMask = authoring.LayerMask,
-                ResultCount = authoring.ResultCount,
                 GizmoColor = authoring.GizmoColor,
-                Radius = authoring.Radius
+                Distance = authoring.Distance
             });
-            
+
             AddBuffer<OverlapResultBufferElement>(entity);
         }
     }

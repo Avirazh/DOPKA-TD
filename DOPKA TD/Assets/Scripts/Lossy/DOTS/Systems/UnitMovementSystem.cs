@@ -1,9 +1,12 @@
 using Assets.Scripts.Lossy.DOTS.Aspects;
+using Lossy.DOTS.Components;
 using ProjectDawn.Navigation;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
+using PortalAspect = Lossy.DOTS.Aspects.PortalAspect;
+using UnitAspect = Lossy.DOTS.Aspects.UnitAspect;
 
 namespace Lossy.DOTS.Systems
 {

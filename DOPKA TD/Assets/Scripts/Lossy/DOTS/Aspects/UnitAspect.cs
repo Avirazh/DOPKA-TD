@@ -1,8 +1,9 @@
-﻿using ProjectDawn.Navigation;
+﻿using Lossy.DOTS.Components;
+using ProjectDawn.Navigation;
 using Unity.Entities;
 using Unity.Mathematics;
 
-namespace Assets.Scripts.Lossy.DOTS.Aspects
+namespace Lossy.DOTS.Aspects
 {
     public readonly partial struct UnitAspect : IAspect
     {
