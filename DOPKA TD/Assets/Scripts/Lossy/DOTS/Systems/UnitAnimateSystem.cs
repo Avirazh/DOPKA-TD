@@ -1,48 +1,51 @@
+using Lossy.DOTS.Components;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
-using Unity.VisualScripting;
 using UnityEngine;
 
-[UpdateInGroup(typeof(PresentationSystemGroup),OrderFirst = true)]
-public partial struct UnitAnimateSystem : ISystem
+namespace Lossy.DOTS.Systems
 {
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(PresentationSystemGroup),OrderFirst = true)]
+    public partial struct UnitAnimateSystem : ISystem
     {
-        var ecb = new EntityCommandBuffer(Allocator.Temp);
-
-        foreach(var (unitPrefabComponent, entity) in 
-            SystemAPI.Query<UnitPrefabComponent>()
-            .WithNone<UnitAnimatorReferenceComponent>()
-            .WithEntityAccess())
+        public void OnUpdate(ref SystemState state)
         {
-            var instantiatedPrefab = Object.Instantiate(unitPrefabComponent.Value);
-            var animatorReference = new UnitAnimatorReferenceComponent 
+            var ecb = new EntityCommandBuffer(Allocator.Temp);
+
+            foreach(var (unitPrefabComponent, entity) in 
+                    SystemAPI.Query<UnitPrefabComponent>()
+                        .WithNone<UnitAnimatorReferenceComponent>()
+                        .WithEntityAccess())
             {
-                Value = instantiatedPrefab.GetComponent<Animator>() 
-            };
+                var instantiatedPrefab = Object.Instantiate(unitPrefabComponent.Value);
+                var animatorReference = new UnitAnimatorReferenceComponent 
+                {
+                    Value = instantiatedPrefab.GetComponent<Animator>() 
+                };
 
-            ecb.AddComponent(entity, animatorReference);
+                ecb.AddComponent(entity, animatorReference);
+            }
+
+            foreach(var (transform, animatorReference) in 
+                    SystemAPI.Query<LocalTransform, UnitAnimatorReferenceComponent>())
+            {
+                animatorReference.Value.SetBool("Run", true);
+                animatorReference.Value.transform.position = transform.Position;
+                animatorReference.Value.transform.rotation = transform.Rotation;
+            }
+
+            foreach( var (animatorReference, entity) in 
+                    SystemAPI.Query<UnitAnimatorReferenceComponent>()
+                        .WithNone<UnitPrefabComponent, LocalTransform>()
+                        .WithEntityAccess())
+            {
+                Object.Destroy(animatorReference.Value.gameObject);
+                ecb.RemoveComponent<UnitAnimatorReferenceComponent>(entity);
+            }
+
+            ecb.Playback(state.EntityManager);
+            ecb.Dispose();
         }
-
-        foreach(var (transform, animatorReference) in 
-            SystemAPI.Query<LocalTransform, UnitAnimatorReferenceComponent>())
-        {
-            animatorReference.Value.SetBool("Run", true);
-            animatorReference.Value.transform.position = transform.Position;
-            animatorReference.Value.transform.rotation = transform.Rotation;
-        }
-
-        foreach( var (animatorReference, entity) in 
-            SystemAPI.Query<UnitAnimatorReferenceComponent>()
-            .WithNone<UnitPrefabComponent, LocalTransform>()
-            .WithEntityAccess())
-        {
-            Object.Destroy(animatorReference.Value.gameObject);
-            ecb.RemoveComponent<UnitAnimatorReferenceComponent>(entity);
-        }
-
-        ecb.Playback(state.EntityManager);
-        ecb.Dispose();
     }
 }

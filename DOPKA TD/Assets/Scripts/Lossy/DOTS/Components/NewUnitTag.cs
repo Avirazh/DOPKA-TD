@@ -1,7 +1,10 @@
 ﻿using Unity.Entities;
 
-public struct NewUnitTag : IComponentData
+namespace Lossy.DOTS.Components
 {
+    public struct NewUnitTag : IComponentData
+    {
 
+    }
 }
 

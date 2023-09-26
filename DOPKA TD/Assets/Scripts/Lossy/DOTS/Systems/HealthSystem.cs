@@ -10,24 +10,34 @@ namespace Lossy.DOTS.Systems
     public partial struct HealthSystem : ISystem
     {
         [BurstCompile]
-        public void OnCreate(ref SystemState state) { }
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
+        }
+
         [BurstCompile]
-        public void OnDestroy(ref SystemState state) { }
+        public void OnDestroy(ref SystemState state)
+        {
+        }
+        
         [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
-            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+            var entityCommandBufferParallelWriter = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
+            
             new ApplyDamageJob
             {
-                EntityCommandBuffer = entityCommandBuffer,
+                EntityCommandBufferParallelWriter = entityCommandBufferParallelWriter,
             }.ScheduleParallel();
         }
     }
     [BurstCompile]
     public partial struct ApplyDamageJob : IJobEntity
     {
-        public EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
-        public void Execute([ChunkIndexInQuery] int indexInQuery, HealthAspect health, HaveHitTag hitTag)
+        public EntityCommandBuffer.ParallelWriter EntityCommandBufferParallelWriter;
+
+        [BurstCompile]
+        private void Execute([ChunkIndexInQuery] int indexInQuery, HealthAspect health, HaveHitTag hitTag)
         {
             int damageToApply = 0;
 
@@ -39,19 +49,21 @@ namespace Lossy.DOTS.Systems
                 {
                     damageToApply += damage.Value; 
                 }
-                UnityEngine.Debug.Log(damageToApply + " dmg to " + "Entity => (" + health.Entity.Index + ", " + health.Entity.Version + ")");
-
+                
+                //UnityEngine.Debug.Log(damageToApply + " dmg to " + "Entity => (" + health.Entity.Index + ", " + health.Entity.Version + ")");
+                UnityEngine.Debug.Log($"{damageToApply} dmg to Entity => ({health.Entity.Index}, {health.Entity.Version})"); // тоже самое, но выглядет аккуратнее
+                
                 health.CurrentHealth -= damageToApply;
 
                 health.DamageBuffer.Clear();
-                EntityCommandBuffer.RemoveComponent<HaveHitTag>(indexInQuery, health.Entity);
+                EntityCommandBufferParallelWriter.RemoveComponent<HaveHitTag>(indexInQuery, health.Entity);
             }
-
-            if(health.CurrentHealth >= health.MaxHealth)
+            
+            if(health.CurrentHealth >= health.MaxHealth) 
                 health.CurrentHealth = health.MaxHealth;
 
             if (health.CurrentHealth <= 0)
-                EntityCommandBuffer.AddComponent<DestroyTag>(indexInQuery, health.Entity);
+                EntityCommandBufferParallelWriter.AddComponent<DestroyTag>(indexInQuery, health.Entity);
         }
     }
 }

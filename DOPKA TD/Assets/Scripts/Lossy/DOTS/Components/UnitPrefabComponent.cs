@@ -1,7 +1,10 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class UnitPrefabComponent : IComponentData
+namespace Lossy.DOTS.Components
 {
-    public GameObject Value;
+    public class UnitPrefabComponent : IComponentData
+    {
+        public GameObject Value;
+    }
 }

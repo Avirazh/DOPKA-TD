@@ -1,15 +1,19 @@
+using Lossy.DOTS.Components;
 using Unity.Entities;
 using UnityEngine;
 
-public class MovableAuthoring : MonoBehaviour
+namespace Lossy.DOTS.Baking
 {
-   public class MovableBaker : Baker<MovableAuthoring> 
+    public class MovableAuthoring : MonoBehaviour
     {
-        public override void Bake(MovableAuthoring authoring)
+        public class MovableBaker : Baker<MovableAuthoring> 
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
+            public override void Bake(MovableAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-            AddComponent(entity, new MovableTag { });
+                AddComponent(entity, new MovableTag { });
+            }
         }
     }
 }
