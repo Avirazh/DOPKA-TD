@@ -3,7 +3,6 @@ using Lossy.DOTS.Components;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Lossy.DOTS.Systems
 {
@@ -17,7 +16,7 @@ namespace Lossy.DOTS.Systems
 
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<PortalComponent>();
+            state.RequireForUpdate<PortalTag>();
             state.RequireForUpdate<MovableTag>();
             state.RequireForUpdate<ProjectDawn.Navigation.AgentBody>();
         }
@@ -32,7 +31,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var portalEntity = SystemAPI.GetSingletonEntity<PortalComponent>();
+            var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
             _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
             state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.ScheduleParallel(state.Dependency);
         }

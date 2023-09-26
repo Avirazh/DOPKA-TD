@@ -31,6 +31,7 @@ namespace Lossy.DOTS.Systems
             }.ScheduleParallel();
         }
     }
+    
     [BurstCompile]
     public partial struct ApplyDamageJob : IJobEntity
     {
