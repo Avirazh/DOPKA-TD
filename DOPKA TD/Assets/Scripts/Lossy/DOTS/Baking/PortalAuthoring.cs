@@ -12,9 +12,7 @@ namespace Lossy.DOTS.Baking
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
 
-                AddComponent(entity, new PortalComponent 
-                {
-                });
+                AddComponent(entity, new PortalTag { });
             }
         }
     }

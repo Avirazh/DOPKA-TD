@@ -41,10 +41,9 @@ namespace Lossy.DOTS.Systems
         public partial struct UnitMovementJob : IJobEntity
         {
             public float3 PortalPosition;
+            
             void Execute(UnitAspect unitAspect)
             {
-                //Debug.Log("Unit with movementComponent is " + unitAspect.Entity.Index);
-                //Debug.Log("Target position " + PortalPosition);
                 unitAspect.SetDestination(PortalPosition);
             }
         }
