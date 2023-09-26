@@ -10,6 +10,14 @@ namespace Lossy.DOTS.Baking
         public int ResultCount;
         public Vector3 Scale;
         public Color32 GizmoColor;
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = GizmoColor;
+            Gizmos.DrawWireCube(transform.position, Scale);
+        }
+#endif
     }
     
     public class BoxCastOverlapDetectorBaker : Baker<BoxOverlapDetectorMonoBehaviour>

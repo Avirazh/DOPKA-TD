@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Lossy.DOTS.Aspects;
 using Lossy.DOTS.Components;
 using Unity.Burst;
@@ -6,7 +5,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.Physics;
 using Unity.Physics.Systems;
-using UnityEngine;
 using RaycastHit = Unity.Physics.RaycastHit;
 
 namespace Lossy.DOTS.Systems
@@ -19,6 +17,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
+            state.RequireForUpdate<EndSimulationEntityCommandBufferSystem.Singleton>();
             state.RequireForUpdate<PhysicsWorldSingleton>();
         }
         
@@ -31,7 +30,7 @@ namespace Lossy.DOTS.Systems
         public void OnUpdate(ref SystemState state)
         {
             PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-            var entityCommandBuffer = new EntityCommandBuffer(Allocator.TempJob);
+            var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
 
             state.Dependency = new RemoveOverlapResultComponentJob()
             {
@@ -55,10 +54,6 @@ namespace Lossy.DOTS.Systems
                 PhysicsWorldSingleton = physicsWorldSingleton,
                 EntityCommandBuffer = entityCommandBuffer
             }.Schedule(state.Dependency);
-            
-            state.Dependency.Complete();
-            
-            entityCommandBuffer.Playback(state.EntityManager);
         }
 
         [BurstCompile]
@@ -137,7 +132,7 @@ namespace Lossy.DOTS.Systems
                        
                         overlapResultBufferElements.Add(new OverlapResultBufferElement(){Entity = entity});
                     }
-
+                    
                     EntityCommandBuffer.AddComponent(boxOverlapDetectorAspect.Entity, new OverlapResultTag());
                 }
             }
@@ -165,11 +160,6 @@ namespace Lossy.DOTS.Systems
                         GroupIndex = 0
                     }
                 };
-            
-                Debug.DrawRay(
-                    raycastOverlapDetectorAspect.RayStartPosition,
-                    raycastOverlapDetectorAspect.RayDirection * raycastOverlapDetectorAspect.Distance,
-                    raycastOverlapDetectorAspect.GizmoColor);
             
                 RaycastHit hit = new RaycastHit();
                 bool haveHit = collisionWorld.CastRay(input, out hit);

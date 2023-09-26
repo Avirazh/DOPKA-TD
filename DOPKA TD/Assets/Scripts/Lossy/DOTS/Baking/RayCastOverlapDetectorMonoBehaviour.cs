@@ -9,6 +9,14 @@ namespace Lossy.DOTS.Baking
         public LayerMask LayerMask;
         public float Distance;
         public Color32 GizmoColor;
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = GizmoColor;
+            Debug.DrawRay(transform.position, transform.forward * Distance, GizmoColor);
+        }
+#endif
     }
     
     public class RayCastOverlapDetectorBaker : Baker<RayCastOverlapDetectorMonoBehaviour>
