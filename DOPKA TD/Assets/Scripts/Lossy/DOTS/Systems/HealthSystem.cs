@@ -2,6 +2,7 @@
 using Lossy.DOTS.Components;
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Collections;
 
 namespace Lossy.DOTS.Systems
 {
@@ -19,7 +20,8 @@ namespace Lossy.DOTS.Systems
             var entityCommandBuffer = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
             new ApplyDamageJob
             {
-                EntityCommandBuffer = entityCommandBuffer,
+                UnitLookup = SystemAPI.GetComponentLookup<NewUnitTag>(true),
+                EntityCommandBuffer = entityCommandBuffer
             }.ScheduleParallel();
         }
     }
@@ -27,11 +29,11 @@ namespace Lossy.DOTS.Systems
     public partial struct ApplyDamageJob : IJobEntity
     {
         public EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
+
+        [ReadOnly] public ComponentLookup<NewUnitTag> UnitLookup;
         public void Execute([ChunkIndexInQuery] int indexInQuery, HealthAspect health, HaveHitTag hitTag)
         {
             int damageToApply = 0;
-
-            UnityEngine.Debug.Log("ApplyDamageJob was Executed");
 
             if(!health.DamageBuffer.IsEmpty)
             {
@@ -39,7 +41,6 @@ namespace Lossy.DOTS.Systems
                 {
                     damageToApply += damage.Value; 
                 }
-                UnityEngine.Debug.Log(damageToApply + " dmg to " + "Entity => (" + health.Entity.Index + ", " + health.Entity.Version + ")");
 
                 health.CurrentHealth -= damageToApply;
 
@@ -51,7 +52,16 @@ namespace Lossy.DOTS.Systems
                 health.CurrentHealth = health.MaxHealth;
 
             if (health.CurrentHealth <= 0)
-                EntityCommandBuffer.AddComponent<DestroyTag>(indexInQuery, health.Entity);
+                if (UnitLookup.HasComponent(health.Entity))
+                {
+                    EntityCommandBuffer.AddComponent<DieAnimationTag>(indexInQuery, health.Entity);
+                }
+                else
+                {
+                    EntityCommandBuffer.AddComponent<DestroyTag>(indexInQuery, health.Entity);
+                }
+            
         }
+
     }
 }

@@ -33,8 +33,7 @@ namespace Lossy.DOTS.Systems
 
             [BurstCompile]
             public void Execute(in DestroyTag destroyTag, Entity entity)
-            {
-                
+            {               
                 EntityCommandBuffer.DestroyEntity(entity);
             }
         }

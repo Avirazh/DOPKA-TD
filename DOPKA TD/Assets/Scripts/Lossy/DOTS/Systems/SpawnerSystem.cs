@@ -53,6 +53,7 @@ namespace Lossy.DOTS.Systems
                 spawner.TimeToNextSpawn = spawner.Timer;
 
                 Ecb.SetComponent(newUnit, new LocalTransform { Position = spawner.SpawnPosition, Scale = 1f, Rotation = Quaternion.identity });
+                Ecb.AddComponent(newUnit, new NewUnitTag { });
             }
         }
     }
