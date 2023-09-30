@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct CurrentHealthComponent : IComponentData
+    public struct CurrentHealthComponent : IComponentData
     {
         public float Value;
     }

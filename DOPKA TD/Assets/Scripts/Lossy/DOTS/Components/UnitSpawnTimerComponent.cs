@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct UnitSpawnTimerComponent : IComponentData
+    public struct UnitSpawnTimerComponent : IComponentData
     {
         public float TimeToNextSpawn;
         public float Timer;

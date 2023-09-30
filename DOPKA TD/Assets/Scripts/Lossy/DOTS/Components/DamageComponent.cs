@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct DamageComponent : IComponentData
+    public struct DamageComponent : IComponentData
     {
         public int Value;
     }

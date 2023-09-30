@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct HaveHitTag : IComponentData
+    public struct HaveHitTag : IComponentData
     {
 
     }

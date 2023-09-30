@@ -1,17 +1,21 @@
+using Lossy.DOTS.Components;
 using Unity.Entities;
 using UnityEngine;
 
-public class UnitAnimatorAuthoring : MonoBehaviour
+namespace Lossy.DOTS.Baking
 {
-    public GameObject UnitGameObjectPrefab;
-
-    public class UnitGameObjectPrefabBaker : Baker<UnitAnimatorAuthoring>
+    public class UnitAnimatorAuthoring : MonoBehaviour
     {
-        public override void Bake(UnitAnimatorAuthoring authoring)
-        {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
+        public GameObject UnitGameObjectPrefab;
 
-            AddComponentObject(entity, new UnitPrefabComponent { Value = authoring.UnitGameObjectPrefab });
+        public class UnitGameObjectPrefabBaker : Baker<UnitAnimatorAuthoring>
+        {
+            public override void Bake(UnitAnimatorAuthoring authoring)
+            {
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+
+                AddComponentObject(entity, new UnitPrefabComponent { Value = authoring.UnitGameObjectPrefab });
+            }
         }
     }
 }

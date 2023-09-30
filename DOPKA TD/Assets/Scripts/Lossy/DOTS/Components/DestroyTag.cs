@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct DestroyTag : IComponentData
+    public struct DestroyTag : IComponentData
     {
     }
 }
