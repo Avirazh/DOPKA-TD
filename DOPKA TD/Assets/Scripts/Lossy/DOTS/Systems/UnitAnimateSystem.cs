@@ -2,13 +2,12 @@ using Lossy.DOTS.Components;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
-using Unity.VisualScripting;
 using UnityEngine;
 
-[UpdateInGroup(typeof(PresentationSystemGroup), OrderFirst = true)]
-public partial struct UnitAnimateSystem : ISystem
+namespace Lossy.DOTS.Systems
 {
-    public void OnUpdate(ref SystemState state)
+    [UpdateInGroup(typeof(PresentationSystemGroup),OrderFirst = true)]
+    public partial struct UnitAnimateSystem : ISystem
     {
         var ecb = new EntityCommandBuffer(Allocator.Temp);
 

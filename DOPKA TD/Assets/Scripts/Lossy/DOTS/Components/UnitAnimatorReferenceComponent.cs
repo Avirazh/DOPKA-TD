@@ -1,7 +1,10 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class UnitAnimatorReferenceComponent : ICleanupComponentData
+namespace Lossy.DOTS.Components
 {
-    public Animator Value;
+    public class UnitAnimatorReferenceComponent : ICleanupComponentData
+    {
+        public Animator Value;
+    }
 }

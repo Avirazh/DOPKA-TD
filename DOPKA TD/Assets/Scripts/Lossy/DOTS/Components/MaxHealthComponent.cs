@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct MaxHealthComponent : IComponentData
+    public struct MaxHealthComponent : IComponentData
     {
         public int Value;
     }

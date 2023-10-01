@@ -2,18 +2,18 @@ using Lossy.DOTS.Components;
 using Unity.Entities;
 using UnityEngine;
 
-public class PortalAuthoring : MonoBehaviour
+namespace Lossy.DOTS.Baking
 {
-    public float Health;
-    public class PortalBaker : Baker<PortalAuthoring>
+    public class PortalAuthoring : MonoBehaviour
     {
-        public override void Bake(PortalAuthoring authoring)
+        public class PortalBaker : Baker<PortalAuthoring>
         {
-            var entity = GetEntity(TransformUsageFlags.Dynamic);
-
-            AddComponent(entity, new PortalComponent 
+            public override void Bake(PortalAuthoring authoring)
             {
-            });
+                var entity = GetEntity(TransformUsageFlags.Dynamic);
+
+                AddComponent(entity, new PortalTag());
+            }
         }
     }
 }

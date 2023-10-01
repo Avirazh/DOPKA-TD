@@ -1,6 +1,9 @@
 ﻿using Unity.Entities;
 
-public struct MovableTag : IComponentData
+namespace Lossy.DOTS.Components
 {
+    public struct MovableTag : IComponentData
+    {
 
+    }
 }

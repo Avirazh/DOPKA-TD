@@ -2,7 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public partial struct DamageBufferElement : IBufferElementData
+    public struct DamageBufferElement : IBufferElementData
     {
         public int Value;
     }
