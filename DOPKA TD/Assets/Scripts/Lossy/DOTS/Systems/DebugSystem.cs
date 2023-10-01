@@ -24,7 +24,7 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            state.Dependency = new DebugJob().Schedule(state.Dependency);
+            //state.Dependency = new DebugJob().Schedule(state.Dependency);
         }
 
         [BurstCompile]

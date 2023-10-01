@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2386225723762539444}
   - {fileID: 318005697895958891}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4081581066303245906
 MeshFilter:
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackZoneGameObject: {fileID: 7897345624294259477}
-  AttackCooldown: 5
+  AttackCooldown: 2
   AttackProjectilePrefab: {fileID: 2159402159359212964, guid: 065e1f9bd9ce948359ca446faaa58323, type: 3}
   AttackSpawnPoint: {fileID: 318005697895958891}
 --- !u!1 &5041444287659475855

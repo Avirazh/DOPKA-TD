@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 5
-  Speed: 10
+  Speed: 100
   Tolerance: 5
   HitPrefab: {fileID: 0}
   HitZone: {fileID: 3884126730451255837}
@@ -4951,7 +4951,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   ResultCount: 99
-  Radius: 8.04
+  Radius: 4.46
   GizmoColor:
     serializedVersion: 2
     rgba: 4278190335

@@ -75,14 +75,11 @@ namespace Lossy.DOTS.Systems
             
             private void Execute(ExplodeTag explodeTag, AttackProjectileAspect attackProjectileAspect)
             {
-                UnityEngine.Debug.Log("ExplodeProjectilesJob executed");
                 if (OverlapResultTagLookup.HasComponent(attackProjectileAspect.ExplodeZone))
                 {
                     OverlapResultBufferLookup.TryGetBuffer(attackProjectileAspect.ExplodeZone, out var bufferData);
                     foreach (var overlapResultBufferElement in bufferData)
                     {
-                        UnityEngine.Debug.Log("Attackprojectile overlapResult element" + overlapResultBufferElement.Entity.Index + ", " + overlapResultBufferElement.Entity.Version);
-
                         if (!DamageBufferLookup.HasBuffer(overlapResultBufferElement.Entity)) return;
 
                         DamageBufferLookup.TryGetBuffer(overlapResultBufferElement.Entity, out var damageBuffer);
