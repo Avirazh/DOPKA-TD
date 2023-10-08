@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8341436461883839415}
-  - component: {fileID: 4603503874138183686}
   - component: {fileID: 4882771550350438257}
   - component: {fileID: 8424260956219516637}
   - component: {fileID: 112590845301002055}
   - component: {fileID: 2147380125988479964}
+  - component: {fileID: 4603503874138183686}
   - component: {fileID: 1387644871321755450}
   - component: {fileID: -996030802995520586}
   - component: {fileID: 1232044247937618853}
@@ -40,19 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4603503874138183686
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5878140319270767245}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a40f22c3b1d39f54d827714fab3248ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UnitGameObjectPrefab: {fileID: 168434, guid: fd3b5af2a2c79884cb8e690968af2826, type: 3}
 --- !u!114 &4882771550350438257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,6 +109,19 @@ MonoBehaviour:
   Mode: 3
   BlockedStop: 0
   UseWalls: 0
+--- !u!114 &4603503874138183686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5878140319270767245}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a40f22c3b1d39f54d827714fab3248ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UnitGameObjectPrefab: {fileID: 168434, guid: c8bf7dc1ffaa460448819524a7de6760, type: 3}
 --- !u!114 &1387644871321755450
 MonoBehaviour:
   m_ObjectHideFlags: 0

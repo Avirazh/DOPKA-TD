@@ -6,13 +6,14 @@ using UnityEngine;
 
 namespace Lossy.DOTS.Aspects
 {
+    //commented because it was throwing an exception 
     public readonly partial struct SphereOverlapDetectorAspect : IAspect
     {
         public readonly Entity Entity;
 
         private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<SphereOverlapDetectorComponent> _sphereOverlapDetectorComponent;
-        private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
+        //private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
 
         public float3 StartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
         public float Radius => _sphereOverlapDetectorComponent.ValueRO.Radius;
@@ -27,7 +28,7 @@ namespace Lossy.DOTS.Aspects
         
         private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<BoxOverlapDetectorComponent> _boxOverlapDetectorComponent;
-        private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
+        //private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
         
         public float3 StartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
         public quaternion Rotation => _localToWorld.ValueRO.Rotation;
@@ -43,7 +44,7 @@ namespace Lossy.DOTS.Aspects
         
         private readonly RefRO<LocalToWorld> _localToWorld;
         private readonly RefRO<RaycastOverlapDetectorComponent> _raycastOverlapDetectorComponent;
-        private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
+        //private readonly DynamicBuffer<OverlapResultBufferElement> _overlapResultBufferElements;
 
         public float3 RayStartPosition => _localToWorld.ValueRO.Value.TransformPoint(float3.zero);
         public float3 RayDirection => _localToWorld.ValueRO.Value.Forward();

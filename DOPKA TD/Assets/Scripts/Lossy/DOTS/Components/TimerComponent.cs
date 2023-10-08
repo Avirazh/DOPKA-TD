@@ -14,9 +14,18 @@ namespace Lossy.DOTS.Components
 
         private void SetDuration(float targetDuration)
         {
-            UnityEngine.Debug.Log("TimerComponent SetDuration");
             ElapsedTime = 0;
             TargetDuration = targetDuration;
+        }
+
+        public readonly bool IsDone
+        {
+            get { return ElapsedTime >= TargetDuration; }
+        }
+
+        public void AddTime(float time)
+        {
+            ElapsedTime += time;
         }
     }
 }

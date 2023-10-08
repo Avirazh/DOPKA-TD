@@ -36,11 +36,11 @@ namespace Lossy.DOTS.Systems
         public EntityCommandBuffer.ParallelWriter EntityCommandBuffer;
         public float DeltaTime;
 
-        public void Execute([EntityIndexInQuery] int indexInQuery, TimerAspect timer) 
+        public void Execute([EntityIndexInQuery] int indexInQuery, ref TimerComponent timer, Entity entity) 
         {           
             if(timer.IsDone)
             {
-                EntityCommandBuffer.RemoveComponent<TimerComponent>(indexInQuery, timer.entity);
+                EntityCommandBuffer.RemoveComponent<TimerComponent>(indexInQuery, entity);
             }
             timer.AddTime(DeltaTime);
         }
