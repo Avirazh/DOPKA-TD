@@ -1,6 +1,9 @@
 ﻿using Unity.Entities;
 
-public struct DieAnimationTag : IComponentData
+namespace Lossy.DOTS.Components
 {
+    public struct DieAnimationTag : IComponentData
+    {
 
+    }
 }

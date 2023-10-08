@@ -6,7 +6,6 @@ namespace Lossy.DOTS.Components
 {
     public class UnitAnimatorReferenceComponent : ICleanupComponentData
     {
-        public Animator Value;
-        public AnimationEventCaster EventCaster;
+        public UnitAnimatorController AnimatorController;
     }
 }

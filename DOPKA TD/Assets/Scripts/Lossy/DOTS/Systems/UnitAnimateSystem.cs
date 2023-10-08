@@ -37,12 +37,10 @@ namespace Lossy.DOTS.Systems
                 var instantiatedPrefab = Object.Instantiate(unitPrefabComponent.Value);
                 var animatorReference = new UnitAnimatorReferenceComponent
                 {
-                    Value = instantiatedPrefab.GetComponent<Animator>(),
-                    EventCaster = instantiatedPrefab.GetComponent<AnimationEventCaster>()
+                    AnimatorController = instantiatedPrefab.GetComponent<UnitAnimatorController>()
                 };
 
-                animatorReference.EventCaster.Entity = entity;
-                animatorReference.EventCaster.DeadAnimationEnded += AnimationEventCasterOnDeadAnimationEnded;
+                animatorReference.AnimatorController.SetEntity(entity);
                 entityCommandBuffer.AddComponent(entity, animatorReference);
                 
             }
@@ -53,9 +51,10 @@ namespace Lossy.DOTS.Systems
                 SystemAPI.Query<LocalTransform, UnitAnimatorReferenceComponent>()
                 .WithNone<DieAnimationTag>())
             {
-                animatorReference.Value.SetBool("Run", true);
+                animatorReference.AnimatorController.SetRunBool(true);
 
-                animatorReference.Value.transform.SetPositionAndRotation(transform.Position, transform.Rotation);
+                //почему это тут
+                animatorReference.AnimatorController.transform.SetPositionAndRotation(transform.Position, transform.Rotation);
             }
         }
         private void TriggerDeathAnimation(EntityCommandBuffer entityCommandBuffer, float deltaTime, ref SystemState state)
@@ -68,7 +67,7 @@ namespace Lossy.DOTS.Systems
                 .WithNone<DestroyTag, DieAnimationInProcessTag, TimerComponent>())
             {
 
-                animator.Value.SetTrigger("Die");
+                animator.AnimatorController.PlayDieAnimation();
 
                 //entityCommandBuffer.AddComponent<DieAnimationInProcessTag>(entity);
 
@@ -92,6 +91,7 @@ namespace Lossy.DOTS.Systems
                 entityCommandBuffer.AddComponent<DestroyTag>(entity);
             }
         }
+        
         private void RemoveUnitPrefab(EntityCommandBuffer entityCommandBuffer, ref SystemState state)
         {
             foreach (var (animatorReference, entity) in
@@ -99,15 +99,9 @@ namespace Lossy.DOTS.Systems
                .WithNone<UnitPrefabComponent, LocalTransform>()
                .WithEntityAccess())
             {
-                animatorReference.EventCaster.DeadAnimationEnded -= AnimationEventCasterOnDeadAnimationEnded;
-
-                Object.Destroy(animatorReference.Value.gameObject);
+                Object.Destroy(animatorReference.AnimatorController.gameObject);
                 entityCommandBuffer.RemoveComponent<UnitAnimatorReferenceComponent>(entity);
             }
-        }
-        private void AnimationEventCasterOnDeadAnimationEnded(EntityManager entityManager, Entity entity)
-        {
-            entityManager.AddComponent<DestroyTag>(entity);
         }
     }
 }
