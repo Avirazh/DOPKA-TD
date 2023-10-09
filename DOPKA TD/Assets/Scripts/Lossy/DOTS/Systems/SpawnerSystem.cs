@@ -27,33 +27,33 @@ namespace Lossy.DOTS.Systems
         public void OnUpdate(ref SystemState state)
         {
             var deltaTime = SystemAPI.Time.DeltaTime;
-            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            var entityCommandBufferParallelWriter = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
 
             new SpawnJob
             {
                 DeltaTime = deltaTime,
-                Ecb = ecb,
-            }.Schedule();
+                EntityCommandBufferParallelWriter = entityCommandBufferParallelWriter,
+            }.ScheduleParallel();
         }
     }
     [BurstCompile]
     public partial struct SpawnJob : IJobEntity
     {
         public float DeltaTime;
-        public EntityCommandBuffer Ecb;
+        public EntityCommandBuffer.ParallelWriter EntityCommandBufferParallelWriter;
 
         [BurstCompile]
-        public void Execute(SpawnerAspect spawner) 
+        public void Execute([ChunkIndexInQuery] int indexInQuery, SpawnerAspect spawner) 
         {
             spawner.TimeToNextSpawn -= DeltaTime;
             if(spawner.TimeToNextSpawn < 0 )
             {
-                var newUnit = Ecb.Instantiate(spawner.Prefab);
+                var newUnit = EntityCommandBufferParallelWriter.Instantiate(indexInQuery ,spawner.Prefab);
 
                 spawner.TimeToNextSpawn = spawner.Timer;
 
-                Ecb.SetComponent(newUnit, new LocalTransform { Position = spawner.SpawnPosition, Scale = 1f, Rotation = Quaternion.identity });
-                Ecb.AddComponent(newUnit, new NewUnitTag { });
+                EntityCommandBufferParallelWriter.SetComponent(indexInQuery, newUnit, new LocalTransform { Position = spawner.SpawnPosition, Scale = 1f, Rotation = Quaternion.identity });
+                EntityCommandBufferParallelWriter.AddComponent(indexInQuery, newUnit, new NewUnitTag { });
             }
         }
     }

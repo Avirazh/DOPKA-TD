@@ -36021,7 +36021,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 2
+  - time: 1.6666666
     functionName: OnDeadAnimationEnded
     data: 
     objectReferenceParameter: {fileID: 11500000, guid: f40fc617068cb445db18b3a2c7e23f78, type: 3}

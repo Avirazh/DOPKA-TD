@@ -72,11 +72,13 @@ namespace Lossy.DOTS.Systems
             
             private void Execute(TowerAspect towerAspect)
             {
-                if (towerAspect.AttackAttackCooldown < towerAspect.AttackTimer && towerAspect.Target != default)
+                if (towerAspect.AttackAttackCooldown < towerAspect.AttackTimer 
+                    && LocalToWorldComponentLookup.TryGetComponent(towerAspect.Target, out var localTransform))
                 {
                     var attackProjectile = EntityCommandBuffer.Instantiate(towerAspect.AttackProjectilePrefab);
                     EntityCommandBuffer.SetComponent(attackProjectile, new LocalTransform { Position = towerAspect.AttackSpawnPoint, Scale = 1f, Rotation = quaternion.identity });
-                    EntityCommandBuffer.AddComponent(attackProjectile, new AttackProjectileTargetPositionComponent() { TargetPosition = LocalToWorldComponentLookup.GetRefRO(towerAspect.Target).ValueRO.Position });
+                    EntityCommandBuffer.AddComponent(attackProjectile, new AttackProjectileTargetPositionComponent() { TargetPosition = localTransform.Position });
+
                     towerAspect.ResetTimer();
                 }
                 towerAspect.AddTime(DeltaTime);
