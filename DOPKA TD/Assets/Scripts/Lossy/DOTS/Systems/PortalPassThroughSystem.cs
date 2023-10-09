@@ -24,22 +24,21 @@ namespace Lossy.DOTS.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state) 
         {
-            var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged);
+            var entityCommandBufferParallelWriter = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>().CreateCommandBuffer(state.WorldUnmanaged).AsParallelWriter();
             new PassThroughJob
             {
                 DamageLookup = SystemAPI.GetComponentLookup<DamageComponent>(true),
-                Ecb = ecb
-            }.Schedule();
+                EntityCommandBufferParallelWriter = entityCommandBufferParallelWriter
+            }.ScheduleParallel();
 
         }
         [BurstCompile]
         public partial struct PassThroughJob : IJobEntity
         {
-            public EntityCommandBuffer Ecb;
+            public EntityCommandBuffer.ParallelWriter EntityCommandBufferParallelWriter;
             [ReadOnly] public ComponentLookup<DamageComponent> DamageLookup;
 
-            [BurstCompile]
-            public void Execute(PortalAspect portal, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements, HealthAspect portalHealth)
+            public void Execute([ChunkIndexInQuery] int indexInQuery, PortalAspect portal, DynamicBuffer<OverlapResultBufferElement> overlapResultBufferElements, HealthAspect portalHealth)
             {
                 if(overlapResultBufferElements.IsEmpty) return;
 
@@ -51,9 +50,9 @@ namespace Lossy.DOTS.Systems
 
                         portalHealth.DamageBuffer.Add(new DamageBufferElement { Value = damageComponent.Value});
 
-                        Ecb.AddComponent(portal.Entity, new HaveHitTag { });
+                        EntityCommandBufferParallelWriter.AddComponent(indexInQuery, portal.Entity, new HaveHitTag { });
                     }
-                    Ecb.AddComponent(element.Entity, new DestroyTag { });
+                    EntityCommandBufferParallelWriter.AddComponent(indexInQuery, element.Entity, new DestroyTag { });
                 }
             }
         }
