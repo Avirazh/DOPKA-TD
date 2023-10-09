@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Lossy.DOTS.Systems
 {
     [BurstCompile]
-    [UpdateAfter(typeof(OverlapDetectorSystem))]
     [UpdateInGroup(typeof(PhysicsSimulationGroup))]
     public partial struct DebugSystem : ISystem
     {

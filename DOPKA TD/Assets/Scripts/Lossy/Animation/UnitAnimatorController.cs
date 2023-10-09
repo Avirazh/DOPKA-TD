@@ -1,4 +1,5 @@
 using Lossy.DOTS.Components;
+using Lossy.DOTS.Systems;
 using Unity.Entities;
 using UnityEngine;
 
@@ -27,10 +28,9 @@ namespace Lossy.Animation
         public void SetRunBool(bool run) => 
             _animator.SetBool(Run, run);
 
-        public void OnDeadAnimationEnded()
+        public void OnDieAnimationEnded()
         {
-            // deadAnimationEndedTag
-            _entityManager.AddComponent<DestroyTag>(_entity);
+            _entityManager.AddComponent<DieAnimationEndedViewTag>(_entity);
         }
     }
 }

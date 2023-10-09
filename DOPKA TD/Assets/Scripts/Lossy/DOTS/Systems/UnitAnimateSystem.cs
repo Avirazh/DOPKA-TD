@@ -16,10 +16,10 @@ namespace Lossy.DOTS.Systems
 
             InstantiateUnitPrefab(ecb, ref state);
 
-            PlayRunAnimation(ref state);
+            PlayRunAnimation(ecb, ref state);
+            MoveGameObject(ref state);
 
-            TriggerDeathAnimation(ecb, SystemAPI.Time.DeltaTime, ref state);
-            WaitForDeathAnimation(ecb, ref state);
+            TriggerDeathAnimation(ecb, ref state);
 
             RemoveUnitPrefab(ecb, ref state);
 
@@ -45,61 +45,53 @@ namespace Lossy.DOTS.Systems
                 
             }
         }
-        private void PlayRunAnimation(ref SystemState state)
-        {
-            foreach (var (transform, animatorReference) in
-                SystemAPI.Query<LocalTransform, UnitAnimatorReferenceComponent>()
-                .WithNone<DieAnimationTag>())
-            {
-                animatorReference.AnimatorController.SetRunBool(true);
 
-                //почему это тут
-                animatorReference.AnimatorController.transform.SetPositionAndRotation(transform.Position, transform.Rotation);
+        private void PlayRunAnimation(EntityCommandBuffer entityCommandBuffer, ref SystemState state)
+        {
+            foreach (var (animator, entity) in
+                SystemAPI.Query<UnitAnimatorReferenceComponent>()
+                .WithEntityAccess()
+                .WithNone<DeathTag, MovableTag>())
+            {
+                animator.AnimatorController.SetRunBool(true);
+
+                entityCommandBuffer.AddComponent<MovableTag>(entity);
             }
         }
-        private void TriggerDeathAnimation(EntityCommandBuffer entityCommandBuffer, float deltaTime, ref SystemState state)
+
+        private void MoveGameObject(ref SystemState state)
         {
-
-            foreach (var (transform, animator, entity) in
+            foreach (var (transform, animator) in
                 SystemAPI.Query<LocalTransform, UnitAnimatorReferenceComponent>()
-                .WithEntityAccess()
-                .WithAny<DieAnimationTag>()
-                .WithNone<DestroyTag, DieAnimationInProcessTag, TimerComponent>())
+                .WithAny<MovableTag>()
+                .WithNone<DeathTag>())
             {
+                animator.AnimatorController.transform.SetPositionAndRotation(transform.Position, transform.Rotation);           
+            }
+        }
 
+        private void TriggerDeathAnimation(EntityCommandBuffer entityCommandBuffer, ref SystemState state)
+        {
+            foreach (var (animator, entity) in
+                SystemAPI.Query<UnitAnimatorReferenceComponent>()
+                .WithEntityAccess()
+                .WithAll<DeathTag, MovableTag>()
+                .WithNone<DestroyTag>())
+            {
                 animator.AnimatorController.PlayDieAnimation();
 
-                //entityCommandBuffer.AddComponent<DieAnimationInProcessTag>(entity);
-
-                //there should be config values
-                //if (animator.Value.GetBool("Die"))
-                  //  animator.Value.speed = 0.7f;
-                
-                entityCommandBuffer.AddComponent(entity, new TimerComponent(2f));
-
-
+                entityCommandBuffer.RemoveComponent<MovableTag>(entity);
             }
-        }
-        private void WaitForDeathAnimation(EntityCommandBuffer entityCommandBuffer, ref SystemState state)
-        {
-            foreach (var (dieAnimationInProcessTag, entity) in
-                SystemAPI.Query<DieAnimationInProcessTag>()
-                .WithEntityAccess()
-                .WithNone<DestroyTag, TimerComponent>())
-            {
+        }        
 
-                entityCommandBuffer.AddComponent<DestroyTag>(entity);
-            }
-        }
-        
         private void RemoveUnitPrefab(EntityCommandBuffer entityCommandBuffer, ref SystemState state)
         {
-            foreach (var (animatorReference, entity) in
+            foreach (var (animator, entity) in
                SystemAPI.Query<UnitAnimatorReferenceComponent>()
                .WithNone<UnitPrefabComponent, LocalTransform>()
                .WithEntityAccess())
             {
-                Object.Destroy(animatorReference.AnimatorController.gameObject);
+                Object.Destroy(animator.AnimatorController.gameObject);
                 entityCommandBuffer.RemoveComponent<UnitAnimatorReferenceComponent>(entity);
             }
         }

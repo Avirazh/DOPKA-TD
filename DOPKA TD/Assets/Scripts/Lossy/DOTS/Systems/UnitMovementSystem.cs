@@ -7,9 +7,7 @@ using Unity.Mathematics;
 namespace Lossy.DOTS.Systems
 {
     [BurstCompile]
-    [UpdateBefore(typeof(UnitAnimateSystem))]
     [UpdateInGroup(typeof(PresentationSystemGroup))]
-    [UpdateAfter(typeof(DestructionSystem))]
     public partial struct UnitMovementSystem : ISystem
     {
         private PortalAspect _portalAspect;
@@ -19,8 +17,6 @@ namespace Lossy.DOTS.Systems
             state.RequireForUpdate<PortalTag>();
             state.RequireForUpdate<MovableTag>();
             state.RequireForUpdate<ProjectDawn.Navigation.AgentBody>();
-
-
         }
 
 
@@ -35,7 +31,7 @@ namespace Lossy.DOTS.Systems
         {
             var portalEntity = SystemAPI.GetSingletonEntity<PortalTag>();
             _portalAspect = SystemAPI.GetAspect<PortalAspect>(portalEntity);
-            state.Dependency = new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.ScheduleParallel(state.Dependency);
+            new UnitMovementJob { PortalPosition = _portalAspect.PortalPosition}.ScheduleParallel();
         }
 
         [BurstCompile]

@@ -2,8 +2,7 @@
 
 namespace Lossy.DOTS.Components
 {
-    public struct DieAnimationTag : IComponentData
-    {
-
+    public struct DeathTag : IComponentData
+    {       
     }
 }

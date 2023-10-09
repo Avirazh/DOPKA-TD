@@ -9,7 +9,6 @@ namespace Lossy.DOTS.Aspects
     {
         public readonly Entity Entity;
 
-        private readonly RefRO<MovableTag> _movableTag;
         private readonly RefRW<AgentBody> _agentBody;
 
         private readonly RefRO<DamageComponent> _damage;
