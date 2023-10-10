@@ -17,7 +17,8 @@ namespace Lossy.DOTS.Systems
             new PortalDeathJob
             {
                 EntityCommandBufferParallelWriter = entityCommandBufferParallelWriter,
-            };
+
+            }.ScheduleParallel();
         }
 
         [BurstCompile]
