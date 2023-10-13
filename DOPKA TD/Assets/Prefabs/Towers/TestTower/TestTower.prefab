@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2386225723762539444}
   - {fileID: 318005697895958891}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &4081581066303245906
 MeshFilter:
@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackZoneGameObject: {fileID: 7897345624294259477}
-  AttackCooldown: 2
+  AttackCooldown: 1
   AttackProjectilePrefab: {fileID: 2159402159359212964, guid: 065e1f9bd9ce948359ca446faaa58323, type: 3}
   AttackSpawnPoint: {fileID: 318005697895958891}
 --- !u!1 &5041444287659475855
@@ -142,7 +142,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2386225723762539444}
-  - component: {fileID: 1148266095203574997}
+  - component: {fileID: 757396318312917690}
   m_Layer: 0
   m_Name: SearchEnemyZone
   m_TagString: Untagged
@@ -165,7 +165,7 @@ Transform:
   m_Father: {fileID: 2681899083838592218}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1148266095203574997
+--- !u!114 &757396318312917690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,14 +174,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7897345624294259477}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdf5a6e5592149a2beef52e3b152f5a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 35b672527a1923d4f996d63f7002bb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LayerMask:
     serializedVersion: 2
     m_Bits: 128
-  ResultCount: 1
-  Radius: 13.9
+  ResultCount: 99
+  Radius: 11.5
   GizmoColor:
     serializedVersion: 2
-    rgba: 4294901760
+    rgba: 3539939072

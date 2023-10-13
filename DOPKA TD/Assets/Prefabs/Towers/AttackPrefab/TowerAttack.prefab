@@ -62,7 +62,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3426909032022298079}
-  - component: {fileID: 2822202639785931211}
+  - component: {fileID: 84795516621781777}
   m_Layer: 0
   m_Name: HitDetector
   m_TagString: Untagged
@@ -85,7 +85,7 @@ Transform:
   m_Father: {fileID: 5022496523517443402}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2822202639785931211
+--- !u!114 &84795516621781777
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,17 +94,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 3884126730451255837}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdf5a6e5592149a2beef52e3b152f5a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 35b672527a1923d4f996d63f7002bb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LayerMask:
     serializedVersion: 2
     m_Bits: 128
   ResultCount: 1
-  Radius: 0.36
+  Radius: 1
   GizmoColor:
     serializedVersion: 2
-    rgba: 4294901760
+    rgba: 4293723903
 --- !u!1 &7214547739766679204
 GameObject:
   m_ObjectHideFlags: 0
@@ -673,7 +673,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 10
+    maxNumParticles: 15
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -4912,7 +4912,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 806872207413212387}
-  - component: {fileID: 1734738036750931296}
+  - component: {fileID: 6521575981592899608}
   m_Layer: 0
   m_Name: DamageZone
   m_TagString: Untagged
@@ -4935,7 +4935,7 @@ Transform:
   m_Father: {fileID: 5022496523517443402}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1734738036750931296
+--- !u!114 &6521575981592899608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4944,14 +4944,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8728141279070471674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdf5a6e5592149a2beef52e3b152f5a8, type: 3}
+  m_Script: {fileID: 11500000, guid: 35b672527a1923d4f996d63f7002bb30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LayerMask:
     serializedVersion: 2
     m_Bits: 128
   ResultCount: 99
-  Radius: 1.8
+  Radius: 3.07
   GizmoColor:
     serializedVersion: 2
-    rgba: 4278190335
+    rgba: 4280496330
